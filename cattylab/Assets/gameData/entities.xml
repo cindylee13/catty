@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<entities>
+  <items>
+    <item id="0" name="cat nip" rarity="0" price ="1"></item>
+    <item id="1" name="wood stick" rarity="1" price ="10"></item>
+    <item id="2" name="magic water" rarity="2" price ="500"></item>
+    <item id="3" name="a fucking diamond" rarity="3" price ="10000"></item>
+  </items>
+  <cats>
+    <cat id="0" name="white cat" level="0" price="na">
+      <description>
+        Most basic cat
+      </description>
+    </cat>
+    <cat id="1" name="black cat" level="0" price="10">
+      <description>
+        yay
+      </description>
+    </cat>
+    <cat id="2" name="wood cat" level="1" price="50">
+      <description>
+        woody cat
+      </description>
+    </cat>
+    <cat id="3" name="water cat" level="2" price="1000">
+      <description>
+        watery cat
+      </description>
+    </cat>
+    <cat id="3" name="How Lemon" level="3" price="999999999999">
+      <description>
+        heh
+      </description>
+    </cat>
+  </cats>
+</entities>
