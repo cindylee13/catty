@@ -22,13 +22,8 @@ public class createSave : ScriptableObject {
 
 public class saveData
 {
-    public int money;
-    public int maxGroupCount;
-    public int maxCats;
-    public int maxGroupPplCount;
-    public int unlockScore;
-    public gameEntities[] gameEntities;
-    public exploreGroups[] exploreGroups;
+    public gameData gameData;
+
     public void saveFile()
     {
         string destination = Application.persistentDataPath + "/playerSave";
@@ -46,7 +41,7 @@ public class saveData
             file = File.Create(destination + filename);
             }
 
-        gameData tmpData = new gameData(money, maxGroupCount, maxCats, maxGroupPplCount, unlockScore, gameEntities, exploreGroups);
+        gameData tmpData = new gameData(gameData);
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, tmpData);
         file.Close();
@@ -72,13 +67,7 @@ public class saveData
     }
 
     public void set(gameData data){
-        money = data.money;
-        maxGroupCount = data.maxGroupCount;
-        maxCats = data.maxCats;
-        maxGroupPplCount = data.maxGroupPplCount;
-        unlockScore = data.unlockScore;
-        gameEntities = (gameEntities[])data.gameEntities.Clone();
-        exploreGroups = (exploreGroups[])data.exploreGroups.Clone();
+        gameData = new gameData(data);
     }
 
 }
