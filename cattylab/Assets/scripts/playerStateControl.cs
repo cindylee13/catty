@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class playerStateControl : MonoBehaviour {
 
-    private int money, maxGroupCount, maxCats, maxGroupPplCount;
+    private saveData overallData;
 
 
 	// Use this for initialization
