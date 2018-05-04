@@ -1,0 +1,17 @@
+{
+    "items":[
+        {"id":0,"name":"cat nip", "rarity":0, "price" : 1},
+        {"id":1,"name":"wood stick", "rarity":1, "price" : 10},
+        {"id":2,"name":"magic water", "rarity":2, "price" : 500},
+        {"id":3,"name":"a fucking diamond", "rarity":3, "price" : 100000}
+    ],
+
+    "cats":[
+        {"id":0, "name":"while cat", "level":0, "price":-1, "description":"Most basic cat"},
+        {"id":1, "name":"black cat", "level":0, "price":10, "description":"yay"},
+        {"id":2, "name":"wood cat", "level":0, "price":-1, "description":"woody"}
+        
+    ]
+        
+    
+}

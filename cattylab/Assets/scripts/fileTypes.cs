@@ -5,29 +5,32 @@ using UnityEngine;
 [System.Serializable]
 public class gameData
 {
-    public int money;
+    public long money;
     public int maxGroupCount;
     public int maxCats;
     public int maxGroupPplCount;
     public int unlockScore;
-    public gameEntities[] gameEntities;
+    public cat[] ownedCats;
+    public item[] ownedItems;
     public exploreGroups[] exploreGroups;
     public bool isCrafting;
     public int craftID;
     public double craftETC;
-
-    public gameData(int moneyInt, int maxG, int maxC, int maxGPC, int uS, gameEntities[] gE, exploreGroups[] eG,bool iC, int cID, double cETC)
+    public gameSettings gameSettings;
+    public gameData(long moneyIn, int maxG, int maxC, int maxGPC, int uS, cat[] oC, item[] oI, exploreGroups[] eG,bool iC, int cID, double cETC, gameSettings gS)
     {
-        money = moneyInt;
+        money = moneyIn;
         maxGroupCount = maxG;
         maxCats = maxC;
         maxGroupPplCount = maxGPC;
         unlockScore = uS;
-        gameEntities = (gameEntities[])gE.Clone();
+        ownedCats = (cat[])oC.Clone();
+        ownedItems = (item[])oI.Clone();
         exploreGroups = (exploreGroups[])eG.Clone();
         isCrafting = iC;
         craftID = cID;
         craftETC = cETC;
+        gameSettings = gS;
     }
 
     public gameData(gameData data){
@@ -36,25 +39,80 @@ public class gameData
         maxCats = data.maxCats;
         maxGroupPplCount = data.maxGroupCount;
         unlockScore = data.unlockScore;
-        gameEntities = (gameEntities[])data.gameEntities.Clone();
+        ownedCats = (cat[])data.ownedCats.Clone();
+        ownedItems = (item[])data.ownedItems.Clone();
         exploreGroups = (exploreGroups[])data.exploreGroups.Clone();
         isCrafting = data.isCrafting;
         craftID = data.craftID;
         craftETC = data.craftETC;
     }
 
-    public static gameData init(){
-        return new gameData(1000,1,20,3,0,new gameEntities[0],new exploreGroups[0],false,-1,0);
+    public static gameData init{
+        get{
+            return new gameData(1000,1,20,3,0,new cat[1]{new cat(0,1,1)},new item[0],new exploreGroups[0],false,-1,0, new gameSettings());
+        }
     }
 }
 
-public struct gameEntities
+
+[System.Serializable]
+public struct item
 {
-    public bool isItem; //true=item  false=cat
-    public int id;
+    public int id{
+        get;
+        set;
+    }
     public int count;
 }
 
+[System.Serializable]
+public class cat
+{
+    public cat(){}
+
+    public cat(int iid, int a, int cc){
+        id = iid;
+        avaliable = a;
+        count = cc;
+    }
+
+    public int id{
+        get;
+        set;
+    }
+    public int avaliable;
+    public int count;
+}
+
+
+
+[System.Serializable]
+public struct catData
+{
+    public int id{
+        get;
+        set;
+    }
+    public string name;
+    public int level;
+    public int price;
+    public string description;
+}
+
+[System.Serializable]
+public struct itemData
+{
+    public int id{
+        get;
+        set;
+    }
+    public string name;
+    public int level;
+    public int price;
+    public string description;
+}
+
+[System.Serializable]
 public struct exploreGroups
 {
     public string groupName;
@@ -62,4 +120,20 @@ public struct exploreGroups
     public bool isOut;
     public double backTime;
     public int destination;
+}
+
+public struct levels
+{
+    public int id;
+    public string name;
+    public int distance;
+    public int rate;
+    public int unlockScore;
+}
+
+[System.Serializable]
+public class gameSettings
+{
+    public bool pure = true;
+    public int maxGroupCount;
 }

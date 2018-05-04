@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 116465154}
   - component: {fileID: 116465153}
   - component: {fileID: 116465152}
+  - component: {fileID: 116465155}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -476,6 +477,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &116465155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 116465151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c7ab76b61fdb54cb9d3dc8e5e8c21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overallStats: {fileID: 710109441}
+  moneeee: {fileID: 85230128}
+  moneyText: {fileID: 1613196397}
+  EventText: {fileID: 624574482}
+  ownedCatText: {fileID: 177613381}
+  CLD: {fileID: 689409988}
 --- !u!1 &134903198
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,8 +602,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 188.4, y: -160.2}
-  m_SizeDelta: {x: 160, y: 100}
+  m_AnchoredPosition: {x: 263, y: -160.2}
+  m_SizeDelta: {x: 320, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &177613381
 MonoBehaviour:
@@ -2362,6 +2380,46 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 688899530}
+--- !u!1 &689409987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 689409989}
+  - component: {fileID: 689409988}
+  m_Layer: 0
+  m_Name: CattyLabDictionary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &689409988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 689409987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c65f1b2efc28e04382cbe03b3cba267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &689409989
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 689409987}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 190.89276, y: 346.3082, z: -1.125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &710109440
 GameObject:
   m_ObjectHideFlags: 0
@@ -2389,6 +2447,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d9ca8ca6fa26f45b2e0f05172b53bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cattyLabDictionaty: {fileID: 0}
+  OnMoneyChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ChangeMoneyText
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnGameInitialize:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ChangeMoneyText
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ChangeOwnedCatText
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  EventNotifier:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: EventWithMessage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!4 &710109442
 Transform:
   m_ObjectHideFlags: 0
