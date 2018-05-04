@@ -22,7 +22,12 @@ public class gameData
         gameEntities = (gameEntities[])gE.Clone();
         exploreGroups = (exploreGroups[])eG.Clone();
     }
+
+    public static gameData init(){
+        return new gameData(1000,1,20,3,0,new gameEntities[0],new exploreGroups[0]);
+    }
 }
+
 public struct gameEntities
 {
     public bool isItem; //true=item  false=cat

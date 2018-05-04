@@ -9,7 +9,12 @@ public class playerStateControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		overallData = new saveData();
+		Debug.Log("init");
+		if(!overallData.loadfile()){
+			overallData.set(gameData.init());
+			overallData.saveFile();
+		}
 	}
 	
 	// Update is called once per frame

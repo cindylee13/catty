@@ -31,10 +31,20 @@ public class saveData
     public exploreGroups[] exploreGroups;
     public void saveFile()
     {
-        string destination = Application.persistentDataPath + "/playerSave/save.dat";
+        string destination = Application.persistentDataPath + "/playerSave";
+        string filename = "/save.dat";
         FileStream file;
-        if (File.Exists(destination)) file = File.OpenWrite(destination);
-        else file = File.Create(destination);
+        if (File.Exists(destination + filename)) {
+            Debug.Log("rewriting");
+            file = File.OpenWrite(destination + filename);
+            }
+        else {
+            Debug.Log("creating");
+            if(!Directory.Exists(destination)){
+                Directory.CreateDirectory(destination);
+            }
+            file = File.Create(destination + filename);
+            }
 
         gameData tmpData = new gameData(money, maxGroupCount, maxCats, maxGroupPplCount, unlockScore, gameEntities, exploreGroups);
         BinaryFormatter bf = new BinaryFormatter();
@@ -42,20 +52,26 @@ public class saveData
         file.Close();
     }
 
-    public void loadfile()
+    public bool loadfile()
     {
+        Debug.Log("loading file");
         string destination = Application.persistentDataPath + "/playerSave/save.dat";
         FileStream file;
         if (File.Exists(destination)) file = File.OpenRead(destination);
         else
         {
-            Debug.LogError("File not found");
-            return;
+            Debug.Log("File not found");
+            return false;
         }
         BinaryFormatter bf = new BinaryFormatter();
         gameData data = (gameData)bf.Deserialize(file);
         file.Close();
+        set(data);
+       
+        return true;
+    }
 
+    public void set(gameData data){
         money = data.money;
         maxGroupCount = data.maxGroupCount;
         maxCats = data.maxCats;
@@ -64,4 +80,5 @@ public class saveData
         gameEntities = (gameEntities[])data.gameEntities.Clone();
         exploreGroups = (exploreGroups[])data.exploreGroups.Clone();
     }
+
 }
