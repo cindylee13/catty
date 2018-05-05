@@ -15,12 +15,33 @@ public class cattyLabDictionaty : MonoBehaviour{
 
 	void start(){
 		rawEntity = ReadString("Assets/gameData/entities.json");
-		Debug.Log(rawEntity);
 		entities = JsonUtility.FromJson<entityCollection>(rawEntity);
 	}
 
 	public string GetCatName(int id){
-		return entities.cats[id].name;
+		try{
+			return entities.cats[id].name;
+		}catch{
+			return "ERRORCAT";
+		}
+	}
+
+	public catData GetCatData(int id){
+		catData tmp = new catData();
+		try{
+			tmp.id = id;
+			tmp.name = entities.cats[id].name;
+			tmp.level = entities.cats[id].level;
+			tmp.price = entities.cats[id].price;
+			tmp.description = entities.cats[id].description;
+		}catch(Exception e){
+			tmp.id = id;
+			tmp.name = "ERRORCAT";
+			tmp.level = -1;
+			tmp.price = -1;
+			tmp.description = "U DON FKED UP:<br>" + e.Message;
+		}
+		return tmp;
 	}
 
 	string ReadString(string path){

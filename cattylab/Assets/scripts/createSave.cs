@@ -59,28 +59,6 @@ public class saveData
         return true;
     }
 
-    public void resetSave(){
-        string destination = Application.persistentDataPath + "/playerSave";
-        string filename = "/save.dat";
-        FileStream file;
-        if (File.Exists(destination + filename)) {
-            Debug.Log("rewriting");
-            file = File.OpenWrite(destination + filename);
-            }
-        else {
-            Debug.Log("creating");
-            if(!Directory.Exists(destination)){
-                Directory.CreateDirectory(destination);
-            }
-            file = File.Create(destination + filename);
-            }
-
-        gameData tmpData = new gameData(gameData.init);
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, tmpData);
-        file.Close();
-    }
-
     public void set(gameData data){
         gameData = new gameData(data);
     }

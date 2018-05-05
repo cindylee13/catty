@@ -14,7 +14,7 @@ public class playerStateControl : MonoBehaviour {
 	//  EVENTS
 	//-----------
 
-	public UnityEvent OnMoneyChanged, OnGameInitialize;
+	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged;
 	public EventWithMessage EventNotifier;
 
 
@@ -31,8 +31,7 @@ public class playerStateControl : MonoBehaviour {
 		if(EventNotifier == null) EventNotifier = new EventWithMessage();
 		if(OnMoneyChanged == null) OnMoneyChanged = new UnityEvent();
 		if(OnGameInitialize == null) OnGameInitialize = new UnityEvent();
-
-
+		if(OnCatDataChaged == null) OnCatDataChaged = new UnityEvent();
 
 
 
@@ -52,9 +51,32 @@ public class playerStateControl : MonoBehaviour {
 	// FUNCTIONS
 	//-----------
 
+	public void ResetGameData(){
+		overallData.set(gameData.init);
+		OnGameInitialize.Invoke();
+		EventNotifier.Invoke("Data Reset");
+	}
+
+	public void SaveGameData(){
+		overallData.saveFile();
+		EventNotifier.Invoke("Data Saved");
+	}
+
 	public long money{
 		get{
 			return overallData.gameData.money;
+		}
+	}
+
+	public int maxGroupCount{
+		get{
+			return overallData.gameData.maxGroupCount;
+		}
+	}
+
+	public int maxGroupPplCount{
+		get{
+			return overallData.gameData.maxGroupPplCount;
 		}
 	}
 
@@ -70,6 +92,77 @@ public class playerStateControl : MonoBehaviour {
 		}
 	}
 
+	public bool CatControl(int id, int amount, CatControlType type){
+		int current = 0;
+		bool success = false;
+		foreach(cat cat in overallData.gameData.ownedCats){
+			if(cat.id == id){
+				if(type == CatControlType.count){
+					int tmp = cat.count;
+					tmp += amount;
+					if(tmp<0){
+						Debug.LogError("Removed too much cats! must be exact 0 to remove cat type");
+						success = false;
+						break;
+					}else if(tmp == 0){
+						Debug.Log("Removing Cat Type");
+						overallData.gameData.ownedCats.RemoveAt(current);
+						current--;
+						success = true;
+						break;
+					}
+					cat.count += amount;
+					cat.avaliable += amount;
+					success = true;
+					break;
+				}else{
+					int tmp = cat.avaliable;
+					tmp += amount;
+					if(tmp < 0){
+						Debug.LogError("Not Enough Cats to occupy!(<0)");
+						success = false;
+						break;
+					}else if(tmp > cat.count){
+						Debug.LogError("Not Enough Cats to occupy!(>cat count)");
+						success = false;
+						break;
+					}else{
+						cat.avaliable = tmp;
+						success = true;
+						break;
+					}
+				}
+			}
+			current++;
+		}
+		if(!success){
+			if(type == CatControlType.avaliable){
+				Debug.LogError("Cat Not Found!");
+				success = false;
+			}else{
+				Debug.Log("Cat not found, adding cat");
+
+				for(int i = 0;i<overallData.gameData.ownedCats.Count;i++){
+					if(overallData.gameData.ownedCats[i].id > id){
+						Debug.Log("Inserting cat to " + i);
+						overallData.gameData.ownedCats.Insert(i,new cat(id, amount, amount));
+						success = true;
+						break;
+					}
+				}
+				if(!success){
+					Debug.Log("Adding cat to the end of the list");
+					overallData.gameData.ownedCats.Add(new cat(id, amount, amount));
+					success = true;
+				}
+
+			}
+		}
+			if(success) OnCatDataChaged.Invoke();
+			else Debug.LogError("U DON FKED UP");
+			return success;
+	}
+
 	void changeMoney(int amount){
 		overallData.gameData.money += amount;
 		OnMoneyChanged.Invoke();
@@ -81,10 +174,10 @@ public class playerStateControl : MonoBehaviour {
 		}
 		EventNotifier.Invoke(message);
 	}
-
-	
-	
-
-	
 }
 
+public enum CatControlType
+{
+	count,
+	avaliable
+}

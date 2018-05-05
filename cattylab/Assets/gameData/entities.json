@@ -7,10 +7,11 @@
     ],
 
     "cats":[
-        {"id":0, "name":"while cat", "level":0, "price":-1, "description":"Most basic cat"},
+        {"id":0, "name":"white cat", "level":0, "price":-1, "description":"Most basic cat"},
         {"id":1, "name":"black cat", "level":0, "price":10, "description":"yay"},
-        {"id":2, "name":"wood cat", "level":0, "price":-1, "description":"woody"}
-        
+        {"id":2, "name":"wood cat", "level":0, "price":-1, "description":"woody"},
+        {"id":3, "name":"water cat", "level":0, "price":-1, "description":"woody"},
+        {"id":4, "name":"HOW LEMON", "level":0, "price":-1, "description":"woody"}
     ]
         
     

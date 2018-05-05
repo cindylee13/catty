@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,9 +11,9 @@ public class gameData
     public int maxCats;
     public int maxGroupPplCount;
     public int unlockScore;
-    public cat[] ownedCats;
-    public item[] ownedItems;
-    public exploreGroups[] exploreGroups;
+    public List<cat> ownedCats;
+    public List<item> ownedItems;
+    public List<exploreGroups> exploreGroups;
     public bool isCrafting;
     public int craftID;
     public double craftETC;
@@ -24,9 +25,9 @@ public class gameData
         maxCats = maxC;
         maxGroupPplCount = maxGPC;
         unlockScore = uS;
-        ownedCats = (cat[])oC.Clone();
-        ownedItems = (item[])oI.Clone();
-        exploreGroups = (exploreGroups[])eG.Clone();
+        ownedCats = new List<cat>(oC);
+        ownedItems = new List<item>(oI);
+        exploreGroups = new List<exploreGroups>(eG);
         isCrafting = iC;
         craftID = cID;
         craftETC = cETC;
@@ -39,9 +40,9 @@ public class gameData
         maxCats = data.maxCats;
         maxGroupPplCount = data.maxGroupCount;
         unlockScore = data.unlockScore;
-        ownedCats = (cat[])data.ownedCats.Clone();
-        ownedItems = (item[])data.ownedItems.Clone();
-        exploreGroups = (exploreGroups[])data.exploreGroups.Clone();
+        ownedCats = new List<cat>(data.ownedCats);
+        ownedItems = new List<item>(data.ownedItems);
+        exploreGroups = new List<exploreGroups>(data.exploreGroups);
         isCrafting = data.isCrafting;
         craftID = data.craftID;
         craftETC = data.craftETC;
@@ -87,7 +88,7 @@ public class cat
 
 
 [System.Serializable]
-public struct catData
+public class catData
 {
     public int id{
         get;
