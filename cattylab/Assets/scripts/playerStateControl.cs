@@ -14,7 +14,7 @@ public class playerStateControl : MonoBehaviour {
 	//  EVENTS
 	//-----------
 
-	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged;
+	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged;
 	public EventWithMessage EventNotifier;
 
 
@@ -32,6 +32,7 @@ public class playerStateControl : MonoBehaviour {
 		if(OnMoneyChanged == null) OnMoneyChanged = new UnityEvent();
 		if(OnGameInitialize == null) OnGameInitialize = new UnityEvent();
 		if(OnCatDataChaged == null) OnCatDataChaged = new UnityEvent();
+		if(OnItemDataChanged == null) OnItemDataChanged = new UnityEvent();
 
 
 
@@ -82,25 +83,27 @@ public class playerStateControl : MonoBehaviour {
 
 	public List<cat> Ownedcats{
 		get{
-			List<cat> tmp = new List<cat>();
-
-			foreach(cat c in overallData.gameData.ownedCats){
-				tmp.Add(c);
-			}
-
-			return tmp;
+			return overallData.gameData.ownedCats;
 		}
 	}
 
+	public List<item> OwnedItems{
+		get{
+			return overallData.gameData.ownedItems;
+		}
+	}
+
+
 	public bool CatControl(int id, int amount, CatControlType type){
 		int current = 0;
-		bool success = false;
+		bool success = false, found = false;
 		foreach(cat cat in overallData.gameData.ownedCats){
 			if(cat.id == id){
+				found = true;
 				if(type == CatControlType.count){
 					int tmp = cat.count;
 					tmp += amount;
-					if(tmp<0){
+					if(tmp < 0){
 						Debug.LogError("Removed too much cats! must be exact 0 to remove cat type");
 						success = false;
 						break;
@@ -135,7 +138,7 @@ public class playerStateControl : MonoBehaviour {
 			}
 			current++;
 		}
-		if(!success){
+		if(!found && amount > 0){
 			if(type == CatControlType.avaliable){
 				Debug.LogError("Cat Not Found!");
 				success = false;
@@ -162,6 +165,50 @@ public class playerStateControl : MonoBehaviour {
 			else Debug.LogError("U DON FKED UP");
 			return success;
 	}
+
+
+	
+	public bool ItemControl(int id, int amount){
+		bool success = false, found = false;
+		int current = 0;
+		foreach(item nowItem in overallData.gameData.ownedItems){
+			if(nowItem.id == id){
+				found = true;
+				if(nowItem.count + amount < 0){
+					Debug.LogError("Must Be exact 0 to remove this item type!");
+					success = false;
+					break;
+				}else if(nowItem.count + amount == 0){
+					Debug.Log("Removing Item Type");
+					overallData.gameData.ownedItems.RemoveAt(current);
+					success = true;
+					break;
+				}else{
+					nowItem.count = nowItem.count + amount;
+					success = true;
+					break;
+				}
+			}
+		}
+		if(!found && amount > 0){
+				Debug.Log("Item not found, adding item");
+				for(int i = 0;i<overallData.gameData.ownedItems.Count;i++){
+					if(overallData.gameData.ownedItems[i].id > id){
+						overallData.gameData.ownedItems.Insert(i, new item(id, amount));
+						success = true;
+						break;
+					}
+				}
+				if(!success){
+					overallData.gameData.ownedItems.Add(new item(id, amount));
+					success = true;
+				}
+		}
+		if(success) OnItemDataChanged.Invoke();
+		else Debug.LogError("U DON FKED UP");
+		return success;
+	}
+
 
 	void changeMoney(int amount){
 		overallData.gameData.money += amount;

@@ -56,9 +56,21 @@ public class gameData
 }
 
 
+public interface Ientity{
+    int id{
+        get;
+        set;
+    }
+}
+
 [System.Serializable]
-public struct item
+public class item:Ientity
 {
+    public item(){}
+    public item(int iid, int icount){
+        id = iid;
+        count = icount;
+    }
     public int id{
         get;
         set;
@@ -67,7 +79,7 @@ public struct item
 }
 
 [System.Serializable]
-public class cat
+public class cat:Ientity
 {
     public cat(){}
 
@@ -83,12 +95,16 @@ public class cat
     }
     public int avaliable;
     public int count;
+    public bool isAvaliable{
+        get{
+            return (count - avaliable) > 0;
+        }
+    }
 }
 
 
-
 [System.Serializable]
-public class catData
+public class catData:Ientity
 {
     public int id{
         get;
@@ -101,7 +117,7 @@ public class catData
 }
 
 [System.Serializable]
-public struct itemData
+public class itemData:Ientity
 {
     public int id{
         get;
@@ -137,4 +153,18 @@ public class gameSettings
 {
     public bool pure = true;
     public int maxGroupCount;
+}
+
+
+[Serializable]
+public class recipeData
+{
+    public int id;
+	public int time;
+	public List<int> cats;
+	public List<int> items;
+    public string type;
+	public int r_id;
+    public int cost;
+	
 }
