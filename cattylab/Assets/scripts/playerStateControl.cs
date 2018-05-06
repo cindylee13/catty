@@ -14,7 +14,7 @@ public class playerStateControl : MonoBehaviour {
 	//  EVENTS
 	//-----------
 
-	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged;
+	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged, OnCraftingStarted, OnCraftingEnded;
 	public EventWithMessage EventNotifier;
 
 
@@ -33,7 +33,9 @@ public class playerStateControl : MonoBehaviour {
 		if(OnGameInitialize == null) OnGameInitialize = new UnityEvent();
 		if(OnCatDataChaged == null) OnCatDataChaged = new UnityEvent();
 		if(OnItemDataChanged == null) OnItemDataChanged = new UnityEvent();
-
+		if(OnCraftingStarted == null) OnCraftingStarted = new UnityEvent();
+		if(OnCraftingEnded == null) OnCraftingEnded = new UnityEvent();
+		OnGameInitialize.AddListener(OnGameInitializehandler);
 
 
 		OnGameInitialize.Invoke();
@@ -49,8 +51,14 @@ public class playerStateControl : MonoBehaviour {
 	}
 
 	//-----------
-	// FUNCTIONS
+	// METHODS
 	//-----------
+
+	private void OnGameInitializehandler(){ // invoke every data event
+		OnCatDataChaged.Invoke();
+		OnMoneyChanged.Invoke();
+		OnItemDataChanged.Invoke();
+	}
 
 	public void ResetGameData(){
 		overallData.set(gameData.init);
@@ -61,6 +69,14 @@ public class playerStateControl : MonoBehaviour {
 	public void SaveGameData(){
 		overallData.saveFile();
 		EventNotifier.Invoke("Data Saved");
+	}
+
+	
+
+	public bool isCrafting{
+		get{
+			return overallData.gameData.isCrafting;
+		}
 	}
 
 	public long money{
@@ -220,6 +236,44 @@ public class playerStateControl : MonoBehaviour {
 			message = "$" + (amount*-1) + " of money deducted...";
 		}
 		EventNotifier.Invoke(message);
+	}
+
+	public void SubmitRecipe(int recipe_id){
+		if(overallData.gameData.isCrafting){
+			Debug.LogError("ALREADY CRAFTING!");
+		}
+		changeMoney(cattyLabDictionaty.GetRecipeCost(recipe_id) * -1);
+		overallData.gameData.isCrafting = true;
+		overallData.gameData.craftID = recipe_id;
+		overallData.gameData.craftETC = ConvertToUnixTimestamp(System.DateTime.Now) + cattyLabDictionaty.GetRecipeTime(recipe_id);
+		OnCraftingStarted.Invoke();
+	}
+
+	void CraftingEnded(){
+		overallData.gameData.isCrafting = false;
+		Ientity entity = cattyLabDictionaty.GetEntityByRecipeID(overallData.gameData.craftID);
+		if(entity.GetType() == typeof(catData)){
+			CatControl(entity.id,1,CatControlType.count);
+			EventNotifier.Invoke("Crafted New Cat: " + ((catData)entity).name);
+			OnCatDataChaged.Invoke();
+		}else{
+			ItemControl(entity.id, 1);
+			EventNotifier.Invoke("Crafted New Item: " + ((itemData)entity).name);
+			OnItemDataChanged.Invoke();
+		}
+		OnCraftingEnded.Invoke();
+	}
+
+
+	private IEnumerator StartCraftingClock(){
+		yield return new WaitForSecondsRealtime((int)(overallData.gameData.craftETC - ConvertToUnixTimestamp(System.DateTime.Now)));
+		CraftingEnded();
+	}
+
+	double ConvertToUnixTimestamp(System.DateTime date){
+		System.DateTime st = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+ 	    System.TimeSpan diff = date - st;
+	    return System.Math.Floor(diff.TotalSeconds);
 	}
 }
 

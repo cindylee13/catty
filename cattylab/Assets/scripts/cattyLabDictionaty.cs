@@ -95,6 +95,18 @@ public class cattyLabDictionaty : MonoBehaviour{
 		return null;
 	}
 
+	public double GetRecipeTime(int id){
+		return (double) recipes.recipes[id].time;
+	}
+
+	public int GetRecipeCost(int id){
+		return recipes.recipes[id].cost;
+	}
+
+	public recipeData GetRecipeByID(int id){
+		return recipes.recipes[id];
+	}
+
 	public Ientity GetEntityByRecipeID(int id){
 		recipeData rD = recipes.recipes[id];
 		if(rD.type=="cat"){

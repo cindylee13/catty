@@ -494,10 +494,17 @@ MonoBehaviour:
   resetBtn: {fileID: 163954811}
   addCatBtn: {fileID: 1253998462}
   addItemBtn: {fileID: 1557871968}
+  addRecipeBtn: {fileID: 481491280}
+  resetRecipeBtn: {fileID: 2114400454}
+  submitRecipeBtn: {fileID: 1381788689}
   moneyText: {fileID: 1613196397}
   EventText: {fileID: 624574482}
   ownedCatText: {fileID: 177613381}
   ownedItemText: {fileID: 267471925}
+  recipeCostText: {fileID: 2129087941}
+  recipeText: {fileID: 550362874}
+  recipeETCText: {fileID: 1647827922}
+  recipeDropdown: {fileID: 547196967}
   CLD: {fileID: 689409988}
 --- !u!1 &134903198
 GameObject:
@@ -2015,6 +2022,7 @@ GameObject:
   - component: {fileID: 547196969}
   - component: {fileID: 547196968}
   - component: {fileID: 547196967}
+  - component: {fileID: 547196970}
   m_Layer: 5
   m_Name: Select
   m_TagString: Untagged
@@ -2131,6 +2139,25 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 547196965}
+--- !u!114 &547196970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 547196965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &550362872
 GameObject:
   m_ObjectHideFlags: 0
@@ -2780,29 +2807,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ChangeMoneyText
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 116465151}
-        m_MethodName: SendMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: ChangeOwnedCatText
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 116465151}
-        m_MethodName: SendMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: ChangeOwnedItemText
+          m_StringArgument: ResetRecipe
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
@@ -2821,6 +2826,17 @@ MonoBehaviour:
           m_StringArgument: ChangeOwnedCatText
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GetRecipeDropdownList
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   OnItemDataChanged:
@@ -2837,6 +2853,27 @@ MonoBehaviour:
           m_StringArgument: ChangeOwnedItemText
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GetRecipeDropdownList
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnCraftingStarted:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnCraftingEnded:
+    m_PersistentCalls:
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   EventNotifier:
