@@ -8,7 +8,7 @@ public class EventWithMessage : UnityEvent<string>{}
 public class playerStateControl : MonoBehaviour {
 
     private saveData overallData;
-	public cattyLabDictionaty cattyLabDictionaty;
+	public cattyLabDictionaty CLD;
 
 	//-----------
 	//  EVENTS
@@ -55,9 +55,14 @@ public class playerStateControl : MonoBehaviour {
 	//-----------
 
 	private void OnGameInitializehandler(){ // invoke every data event
+		StopCoroutine("StartCraftingClock");
 		OnCatDataChaged.Invoke();
 		OnMoneyChanged.Invoke();
 		OnItemDataChanged.Invoke();
+		if(overallData.gameData.isCrafting){
+			OnCraftingStarted.Invoke();
+			StartCoroutine(StartCraftingClock());
+		}
 	}
 
 	public void ResetGameData(){
@@ -76,6 +81,12 @@ public class playerStateControl : MonoBehaviour {
 	public bool isCrafting{
 		get{
 			return overallData.gameData.isCrafting;
+		}
+	}
+
+	public double craftETC{
+		get{
+			return overallData.gameData.craftETC;
 		}
 	}
 
@@ -241,23 +252,57 @@ public class playerStateControl : MonoBehaviour {
 	public void SubmitRecipe(int recipe_id){
 		if(overallData.gameData.isCrafting){
 			Debug.LogError("ALREADY CRAFTING!");
+			return;
 		}
-		changeMoney(cattyLabDictionaty.GetRecipeCost(recipe_id) * -1);
+		Debug.Log("Recipe Received");
+		recipeData rD = CLD.GetRecipeByID(recipe_id);
+		int catToRemove = 0, itemToRemove = 0;
+		changeMoney(rD.cost * -1);
+		for(int i = 0; i<rD.cats.Count;i++){
+			if(i==0 || rD.cats[i-1] == rD.cats[i]){
+				catToRemove++;
+			}else{
+				CatControl(rD.cats[i-1], -catToRemove, CatControlType.count);
+				catToRemove = 1;
+			}
+
+			if(i == rD.cats.Count - 1){
+				CatControl(rD.cats[i], -catToRemove, CatControlType.count);
+			}
+		}
+		Debug.Log("Cat Removed");
+		for(int i = 0; i < rD.items.Count;i++){
+			if(i==0 || rD.items[i-1] == rD.items[i]){
+				itemToRemove++;
+			}else{
+				ItemControl(rD.items[i-1], -itemToRemove);
+				itemToRemove = 1;
+			}
+			if(i == rD.items.Count - 1){
+				ItemControl(rD.items[i], -itemToRemove);
+			}
+		}
+		Debug.Log("Item Removed");
 		overallData.gameData.isCrafting = true;
 		overallData.gameData.craftID = recipe_id;
-		overallData.gameData.craftETC = ConvertToUnixTimestamp(System.DateTime.Now) + cattyLabDictionaty.GetRecipeTime(recipe_id);
+		overallData.gameData.craftETC = ConvertToUnixTimestamp(System.DateTime.Now) + CLD.GetRecipeTime(recipe_id);
+		EventNotifier.Invoke("Crafting Start!");
+		StartCoroutine(StartCraftingClock());
+		OnCatDataChaged.Invoke();
+		OnItemDataChanged.Invoke();
 		OnCraftingStarted.Invoke();
 	}
 
 	void CraftingEnded(){
 		overallData.gameData.isCrafting = false;
-		Ientity entity = cattyLabDictionaty.GetEntityByRecipeID(overallData.gameData.craftID);
+		Ientity entity = CLD.GetEntityByRecipeID(overallData.gameData.craftID);
 		if(entity.GetType() == typeof(catData)){
-			CatControl(entity.id,1,CatControlType.count);
+			Debug.Log("Added Cat:" + ((catData)entity).name + "  ID:" + ((catData)entity).id);
+			CatControl(((catData)entity).id,1,CatControlType.count);
 			EventNotifier.Invoke("Crafted New Cat: " + ((catData)entity).name);
 			OnCatDataChaged.Invoke();
 		}else{
-			ItemControl(entity.id, 1);
+			ItemControl(((itemData)entity).id, 1);
 			EventNotifier.Invoke("Crafted New Item: " + ((itemData)entity).name);
 			OnItemDataChanged.Invoke();
 		}

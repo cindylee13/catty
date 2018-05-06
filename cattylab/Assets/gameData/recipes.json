@@ -2,7 +2,7 @@
     "recipes":[
         {
             "id":0,
-            "time":30,
+            "time":3,
             "items":[0],
             "cats":[0],
             "type":"cat",

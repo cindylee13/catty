@@ -44,7 +44,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 			tmp.name = "ERRORCAT";
 			tmp.level = -1;
 			tmp.price = -1;
-			tmp.description = "U DON FKED UP:<br>" + e.Message;
+			tmp.description = "U DON FKED UP:\n" + e.Message;
 		}
 		return tmp;
 	}
@@ -110,9 +110,9 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public Ientity GetEntityByRecipeID(int id){
 		recipeData rD = recipes.recipes[id];
 		if(rD.type=="cat"){
-			return entities.cats[rD.id];
+			return GetCatData(rD.r_id);
 		}else if(rD.type=="item"){
-			return entities.items[rD.id];
+			return GetItemData(rD.r_id);
 		}
 		return null;
 	}

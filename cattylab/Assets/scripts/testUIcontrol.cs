@@ -28,6 +28,8 @@ public class testUIcontrol : MonoBehaviour {
 		overallStats.EventNotifier.AddListener(ChangeEventText);
 		addRecipeBtn.onClick.AddListener(AddRecipeBtnTask);
 		resetRecipeBtn.onClick.AddListener(resetRecipeBtnTask);
+		submitRecipeBtn.onClick.AddListener(SubmitRecipeBtnTask);
+
 	}
 	
 	// Update is called once per frame
@@ -89,6 +91,10 @@ public class testUIcontrol : MonoBehaviour {
 		ResetRecipe();
 	}
 
+	void SubmitRecipeBtnTask(){
+		SubmitRecipe();
+	}
+
 	//------------
 	//Change Text
 	//------------
@@ -104,9 +110,9 @@ public class testUIcontrol : MonoBehaviour {
 	void ChangeOwnedCatText(){
 		string outputText = "";
 		cat[] cats = overallStats.Ownedcats.ToArray();
-		outputText = string.Format("{0}  all:{1} avaliable:{2}", CLD.GetCatName(cats[0].id), cats[0].count, cats[0].avaliable);
+		outputText = string.Format("{0}: {1}  all:{2} avaliable:{3}",cats[0].id, CLD.GetCatName(cats[0].id), cats[0].count, cats[0].avaliable);
 		for(int i=1;i<cats.Length;i++){
-			outputText += string.Format("\n{0}  all:{1} avaliable:{2}", CLD.GetCatName(cats[i].id), cats[i].count, cats[i].avaliable);
+			outputText += string.Format("\n{0}: {1}  all:{2} avaliable:{3}",cats[i].id, CLD.GetCatName(cats[i].id), cats[i].count, cats[i].avaliable);
 		}
 		ownedCatText.text = outputText;
 	}
@@ -123,11 +129,13 @@ public class testUIcontrol : MonoBehaviour {
 
 	void GetRecipeDropdownList(){
 		recipeOptionData.Clear();
+		recipeOptionData.TrimExcess();
 		recipeOptions.Clear();
+		recipeOptions.TrimExcess();
 		recipeDropdown.ClearOptions();
 		recipeOptions.Add(new Dropdown.OptionData("Select"));
 		foreach(cat c in overallStats.Ownedcats){
-			int remains = c.avaliable - matchingEntityInList(catOccupied, c.id);
+			int remains = c.avaliable - MatchingEntityInList(catOccupied, c.id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
 				r_option.text = CLD.GetCatName(c.id) + "  (" + remains + ") ";
@@ -136,10 +144,10 @@ public class testUIcontrol : MonoBehaviour {
 			}
 		}
 		foreach(item i in overallStats.OwnedItems){
-			int remains = i.count - matchingEntityInList(catOccupied, i.id);
+			int remains = i.count - MatchingEntityInList(catOccupied, i.id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
-				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - matchingEntityInList(catOccupied, i.id)) + ") ";
+				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - MatchingEntityInList(catOccupied, i.id)) + ") ";
 				recipeOptions.Add(r_option);
 				recipeOptionData.Add(CLD.GetItemData(i.id));
 			}
@@ -166,6 +174,8 @@ public class testUIcontrol : MonoBehaviour {
 	public void ResetOccupyList(){
 		catOccupied.Clear();
 		itemOccupied.Clear();
+		catOccupied.TrimExcess();
+		itemOccupied.TrimExcess();
 		GetRecipeDropdownList();// reset the dropdown list
 	}
 
@@ -182,7 +192,7 @@ public class testUIcontrol : MonoBehaviour {
 		overallStats.SendMessage("SubmitRecipe", s_recipe.id);
 	}
 
-	private int matchingEntityInList(List<int> a, int id){
+	private int MatchingEntityInList(List<int> a, int id){
 		int matching = 0;
 		foreach(int data in a){
 			if(data==id) matching++;
@@ -190,12 +200,30 @@ public class testUIcontrol : MonoBehaviour {
 		return matching;
 	}
 
-	private void craftingStarted(){
+	private void CraftingStarted(){
 		addRecipeBtn.interactable = false;
 		resetRecipeBtn.interactable = false;
 		submitRecipeBtn.interactable = false;
 		recipeCostText.text = "CRAFTING...";
+		StartCoroutine(countDownClock());
 	}
 
-	
+	private void CraftingEnded(){
+		addRecipeBtn.interactable = true;
+		resetRecipeBtn.interactable = true;
+		ResetRecipe();
+	}
+
+	IEnumerator countDownClock(){
+		while(overallStats.isCrafting){
+			recipeETCText.text = (int)(overallStats.craftETC - ConvertToUnixTimestamp(System.DateTime.Now)) + "Secs";
+			yield return new WaitForSeconds(1f);
+		}
+	}
+
+	double ConvertToUnixTimestamp(System.DateTime date){
+		System.DateTime st = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+ 	    System.TimeSpan diff = date - st;
+	    return System.Math.Floor(diff.TotalSeconds);
+	}
 }
