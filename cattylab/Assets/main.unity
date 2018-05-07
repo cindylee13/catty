@@ -510,6 +510,7 @@ MonoBehaviour:
   mgpcText: {fileID: 1065266335}
   recipeDropdown: {fileID: 547196967}
   crewDropdown: {fileID: 1960265952}
+  levelDropdown: {fileID: 1433699618}
   CLD: {fileID: 689409988}
 --- !u!1 &134903198
 GameObject:
@@ -2814,6 +2815,17 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: ResetRecipe
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 116465151}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GetLevelDropdownList
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,

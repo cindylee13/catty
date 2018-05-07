@@ -8,10 +8,10 @@ public class testUIcontrol : MonoBehaviour {
 	public playerStateControl overallStats;
 	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn, resetRecipeBtn, submitRecipeBtn, addCrewBtn;
 	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText, recipeText, recipeETCText, crewReadyText, gcText, mgpcText;
-	public Dropdown recipeDropdown, crewDropdown;
-	private List<Dropdown.OptionData> recipeOptions, crewOptions;
+	public Dropdown recipeDropdown, crewDropdown, levelDropdown;
+	private List<Dropdown.OptionData> recipeOptions, crewOptions, levelOptions;
 	public cattyLabDictionaty CLD;
-	private List<int> catOccupied, itemOccupied, crewOptionData, crewReady;
+	private List<int> catOccupied, itemOccupied, crewOptionData, crewReady, levelOptionData;
 	private List<Ientity> recipeOptionData;
 
 	// Use this for initialization
@@ -20,6 +20,8 @@ public class testUIcontrol : MonoBehaviour {
 		crewOptionData = new List<int>();
 		catOccupied = new List<int>();
 		itemOccupied = new List<int>();
+		levelOptionData = new List<int>();
+		levelOptions = new List<Dropdown.OptionData>();
 		recipeOptions = new List<Dropdown.OptionData>();
 		crewOptions = new List<Dropdown.OptionData>();
 		crewReady = new List<int>();
@@ -100,6 +102,7 @@ public class testUIcontrol : MonoBehaviour {
 			recipeETCText.text = "Not Found";
 		}
 		submitRecipeBtn.interactable = possibleRecipe != null && possibleRecipe.cost < overallStats.money;
+		GetRecipeDropdownList();
 	}
 
 	void resetRecipeBtnTask(){
@@ -147,6 +150,27 @@ public class testUIcontrol : MonoBehaviour {
 		ownedItemText.text = outputText;
 	}
 
+	void GetLevelDropdownList(){
+		levelOptionData.Clear();
+		levelOptions.Clear();
+		levelDropdown.ClearOptions();
+		levelOptions.Add(new Dropdown.OptionData("Select"));
+		for(int i = 0 ; i < CLD.GetTotalLevelCount(); i++){
+			levels levels = CLD.GetLevelByID(i);
+			if(levels.avaliable(overallStats.unlockScore)){
+				Dropdown.OptionData l_option = new Dropdown.OptionData();
+				l_option.text = levels.name;
+				levelOptions.Add(l_option);
+				levelOptionData.Add(levels.id);
+			}
+		}
+		foreach(Dropdown.OptionData message in levelOptions){
+			levelDropdown.options.Add(message);
+		}
+		levelDropdown.value = 0;
+		levelDropdown.RefreshShownValue();
+	}
+
 	void GetRecipeDropdownList(){
 		recipeOptionData.Clear();
 		recipeOptions.Clear();
@@ -162,7 +186,7 @@ public class testUIcontrol : MonoBehaviour {
 			}
 		}
 		foreach(item i in overallStats.OwnedItems){
-			int remains = i.count - MatchingEntityInList(catOccupied, i.id);
+			int remains = i.count - MatchingEntityInList(itemOccupied, i.id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
 				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - MatchingEntityInList(catOccupied, i.id)) + ") ";
@@ -255,7 +279,7 @@ public class testUIcontrol : MonoBehaviour {
 		resetRecipeBtn.interactable = false;
 		submitRecipeBtn.interactable = false;
 		recipeCostText.text = "CRAFTING...";
-		StartCoroutine(countDownClock());
+		StartCoroutine(craftingCountDownClock());
 	}
 
 	private void CraftingEnded(){
@@ -264,7 +288,7 @@ public class testUIcontrol : MonoBehaviour {
 		ResetRecipe();
 	}
 
-	IEnumerator countDownClock(){
+	IEnumerator craftingCountDownClock(){
 		while(overallStats.isCrafting){
 			recipeETCText.text = (int)(overallStats.craftETC - ConvertToUnixTimestamp(System.DateTime.Now)) + "Secs";
 			yield return new WaitForSeconds(1f);
