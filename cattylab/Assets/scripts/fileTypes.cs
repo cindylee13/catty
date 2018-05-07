@@ -14,11 +14,12 @@ public class gameData
     public List<cat> ownedCats;
     public List<item> ownedItems;
     public List<exploreGroups> exploreGroups;
+    public List<exploredLevels> exploredLevels;
     public bool isCrafting;
     public int craftID;
     public double craftETC;
     public gameSettings gameSettings;
-    public gameData(long moneyIn, int maxG, int maxC, int maxGPC, int uS, cat[] oC, item[] oI, exploreGroups[] eG,bool iC, int cID, double cETC, gameSettings gS)
+    public gameData(long moneyIn, int maxG, int maxC, int maxGPC, int uS, cat[] oC, item[] oI, exploreGroups[] eG,exploredLevels[] eL,bool iC, int cID, double cETC, gameSettings gS)
     {
         money = moneyIn;
         maxGroupCount = maxG;
@@ -28,6 +29,7 @@ public class gameData
         ownedCats = new List<cat>(oC);
         ownedItems = new List<item>(oI);
         exploreGroups = new List<exploreGroups>(eG);
+        exploredLevels = new List<exploredLevels>(eL);
         isCrafting = iC;
         craftID = cID;
         craftETC = cETC;
@@ -43,6 +45,7 @@ public class gameData
         ownedCats = new List<cat>(data.ownedCats);
         ownedItems = new List<item>(data.ownedItems);
         exploreGroups = new List<exploreGroups>(data.exploreGroups);
+        exploredLevels = new List<exploredLevels>(data.exploredLevels);
         isCrafting = data.isCrafting;
         craftID = data.craftID;
         craftETC = data.craftETC;
@@ -50,16 +53,27 @@ public class gameData
 
     public static gameData init{
         get{
-            return new gameData(1000,1,20,3,0,new cat[1]{new cat(0,1,1)},new item[0],new exploreGroups[0],false,-1,0, new gameSettings());
+            return new gameData(1000,1,20,3,0,new cat[1]{new cat(0,1,1)},new item[0],new exploreGroups[0], new exploredLevels[0],false,-1,0, new gameSettings());
         }
     }
 }
 
+public class exploredLevels{
+    public int id;
+    public int rate;
+}
 
 public interface Ientity{
     int id{
         get;
         set;
+    }
+}
+
+public interface ILootable:Ientity
+{
+    int rarity{
+        get;
     }
 }
 
@@ -104,7 +118,7 @@ public class cat:Ientity
 
 
 [System.Serializable]
-public class catData:Ientity
+public class catData:Ientity, ILootable
 {
 
     public int id{
@@ -115,17 +129,26 @@ public class catData:Ientity
     public int level;
     public int price;
     public string description;
+
+    public int rarity{
+        get{
+            return level;
+        }
+    }
 }
 
 [System.Serializable]
-public class itemData:Ientity
+public class itemData:Ientity, ILootable
 {
     public int id{
         get;
         set;
     }
     public string name;
-    public int level;
+    public int rarity{
+        get;
+        set;
+    }
     public int price;
     public string description;
 }
@@ -135,9 +158,9 @@ public class exploreGroups
 {
     public string groupName;
     public int[] crews; //ids of each cat
-    public bool isOut;
-    public double backTime;
+    public double ETC;
     public int destination;
+
 }
 
 [System.Serializable]
@@ -148,6 +171,7 @@ public class levels
     public int distance;
     public int rate;
     public int unlockScore;
+    public int cost;
 
     public loots[] loots;
 

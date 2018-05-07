@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class testUIcontrol : MonoBehaviour {
 	public playerStateControl overallStats;
-	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn, resetRecipeBtn, submitRecipeBtn, addCrewBtn;
-	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText, recipeText, recipeETCText, crewReadyText, gcText, mgpcText;
+	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn,
+				  resetRecipeBtn, submitRecipeBtn, addCrewBtn, resetCrewBtn, sendCrewBtn;
+	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText,
+				recipeText, recipeETCText, crewReadyText, gcText, mgpcText, exploreCostText, exploreETCText;
 	public Dropdown recipeDropdown, crewDropdown, levelDropdown;
 	private List<Dropdown.OptionData> recipeOptions, crewOptions, levelOptions;
 	public cattyLabDictionaty CLD;
@@ -35,6 +37,10 @@ public class testUIcontrol : MonoBehaviour {
 		resetRecipeBtn.onClick.AddListener(resetRecipeBtnTask);
 		submitRecipeBtn.onClick.AddListener(SubmitRecipeBtnTask);
 		addCrewBtn.onClick.AddListener(AddCrewBtnTask);
+		resetCrewBtn.onClick.AddListener(ResetCrewBtnTask);
+		levelDropdown.onValueChanged.AddListener(delegate{
+			LevelDropdownChanged();
+		});
 
 	}
 	
@@ -81,6 +87,7 @@ public class testUIcontrol : MonoBehaviour {
 		}
 		mgpcText.text = string.Format("({0}/{1})", crewReady.Count, overallStats.maxGroupPplCount);
 		addCrewBtn.interactable = overallStats.maxGroupPplCount > crewReady.Count;
+		sendCrewBtn.interactable = (crewReady.Count >= 1) && (levelDropdown.value > 0);
 	}
 
 	void AddRecipeBtnTask(){
@@ -111,6 +118,11 @@ public class testUIcontrol : MonoBehaviour {
 
 	void SubmitRecipeBtnTask(){
 		SubmitRecipe();
+	}
+
+	void ResetCrewBtnTask(){
+		sendCrewBtn.interactable = false;
+		ResetReadyList();
 	}
 
 	//------------
@@ -150,6 +162,20 @@ public class testUIcontrol : MonoBehaviour {
 		ownedItemText.text = outputText;
 	}
 
+	void LevelDropdownChanged(){
+		if(levelDropdown.value == 0){
+			exploreCostText.text = "----";
+			exploreETCText.text = "----";
+			return;
+		};
+		int levelID = levelOptionData[levelDropdown.value - 1];
+		levels lvl = CLD.GetLevelByID(levelID);
+		exploreCostText.text = "Cost: "+ lvl.cost;
+		exploreETCText.text = lvl.distance + " Sec";
+		sendCrewBtn.interactable = (crewReady.Count >= 1) && (levelDropdown.value > 0);
+
+	}
+
 	void GetLevelDropdownList(){
 		levelOptionData.Clear();
 		levelOptions.Clear();
@@ -169,6 +195,7 @@ public class testUIcontrol : MonoBehaviour {
 		}
 		levelDropdown.value = 0;
 		levelDropdown.RefreshShownValue();
+		sendCrewBtn.interactable = (crewReady.Count >= 1) && (levelDropdown.value > 0);
 	}
 
 	void GetRecipeDropdownList(){
@@ -248,6 +275,8 @@ public class testUIcontrol : MonoBehaviour {
 
 	public void ResetReadyList(){
 		crewReady.Clear();
+		crewReadyText.text = "";
+		addCrewBtn.interactable = true;
 		GetCrewDropdownList();
 	}
 

@@ -121,6 +121,12 @@ public class playerStateControl : MonoBehaviour {
 		}
 	}
 
+	public bool canSendGroup{
+		get{
+			return groupCount < maxGroupCount;
+		}
+	}
+
 	public List<cat> Ownedcats{
 		get{
 			return overallData.gameData.ownedCats;
@@ -133,6 +139,26 @@ public class playerStateControl : MonoBehaviour {
 		}
 	}
 
+	public void SendGroup(exploreGroups eG){
+		if(!canSendGroup){
+			Debug.LogError("CAN'T SEND MORE GROUP FUCKER");
+			return;
+		}
+		int count = 0;
+		for(int i = 0; i < eG.crews.Length;i++){
+			if(i==0 || eG.crews[i] == eG.crews[i - 1]){
+				count++;
+			}else{
+				CatControl(eG.crews[i-1], -count, CatControlType.avaliable);
+				count = 1;
+			}
+			if(i+1==eG.crews.Length){
+				CatControl(eG.crews[i], -count, CatControlType.avaliable);
+			}
+		}
+		overallData.gameData.exploreGroups.Add(eG);
+		StartExploreClock(eG);
+	}
 
 	public bool CatControl(int id, int amount, CatControlType type){
 		int current = 0;
@@ -322,10 +348,61 @@ public class playerStateControl : MonoBehaviour {
 		OnCraftingEnded.Invoke();
 	}
 
+	private void ExploreEnded(int indexInList){
+		exploreGroups eG = overallData.gameData.exploreGroups[indexInList];
+		levels lvl = CLD.GetLevelByID(eG.destination);
+		List<Ientity> loots = new List<Ientity>(CaculateLoots(lvl, eG.crews));
+		int count = 0;
+		for(int i=0;i<eG.crews.Length;i++){
+			if(i==0 || eG.crews[i]==eG.crews[i-1]){
+				count++;
+			}else{
+				CatControl(eG.crews[i-1], count, CatControlType.avaliable);
+				count = 1;
+			}
+			if(i+1==eG.crews.Length){
+				CatControl(eG.crews[i], count, CatControlType.avaliable);
+			}
+		}
+
+	}
+
+	private Ientity[] CaculateLoots(levels levels, int[] catIDs){
+		List<Ientity> loots = new List<Ientity>();
+		List<loots> possibleLoots = new List<loots>(levels.loots);
+		foreach(int ID in catIDs){
+			Ientity bestLoot = null;
+			catData cat = CLD.GetCatData(ID);
+			foreach(loots lootData in possibleLoots){
+				ILootable lootCand;
+				if(lootData.type == "cat"){
+					lootCand = CLD.GetCatData(lootData.id);
+				}else{
+					lootCand = CLD.GetItemData(lootData.id);
+				}
+				int dice = (int)(Random.Range(0, 100) - (lootCand.rarity - cat.rarity) * CLD.GetPossibleBonus());
+				if(dice <= lootData.pos){
+					bestLoot = lootCand;
+				}
+			}
+			loots.Add(bestLoot);
+		}
+		return loots.ToArray();
+	}
+
 
 	private IEnumerator StartCraftingClock(){
 		yield return new WaitForSecondsRealtime((int)(overallData.gameData.craftETC - ConvertToUnixTimestamp(System.DateTime.Now)));
 		CraftingEnded();
+	}
+
+	private IEnumerator StartExploreClock(exploreGroups eG){
+		yield return new WaitForSecondsRealtime((int)(eG.ETC - ConvertToUnixTimestamp(System.DateTime.Now)));
+		for(int i = 0; i< overallData.gameData.exploreGroups.Count;i++){
+			if(IsSame(overallData.gameData.exploreGroups[i], eG)){
+				ExploreEnded(i);
+			}
+		}
 	}
 
 	double ConvertToUnixTimestamp(System.DateTime date){
@@ -333,6 +410,22 @@ public class playerStateControl : MonoBehaviour {
  	    System.TimeSpan diff = date - st;
 	    return System.Math.Floor(diff.TotalSeconds);
 	}
+
+	public bool IsSame(exploreGroups eg1, exploreGroups eg2){
+		if(eg1.ETC != eg2.ETC){
+			return false;
+		}
+        if(eg1.crews.Length == eg2.crews.Length){
+		   for(int i=0;i<eg1.crews.Length;i++){
+			   if(eg1.crews[i] != eg2.crews[i]){
+				   return false;
+			   }
+		    } 
+	   }else{
+		   return false;
+	   }
+	   return eg1.destination == eg2.destination && eg1.groupName == eg2.groupName;
+    }
 }
 
 public enum CatControlType

@@ -7,10 +7,11 @@ using UnityEngine;
 [System.Serializable]
 public class cattyLabDictionaty : MonoBehaviour{
 
-	private string rawEntity,rawRecipes,rawLevels;
+	private string rawEntity,rawRecipes,rawLevels,rawSettings;
 	private entityCollection entityCollection = new entityCollection();
 	private recipeCollection recipeCollection = new recipeCollection();
 	private levelCollection levelCollection = new levelCollection();
+	private CLGameSettings gameSettings = new CLGameSettings();
 
 	public cattyLabDictionaty(){
 		start();
@@ -20,9 +21,11 @@ public class cattyLabDictionaty : MonoBehaviour{
 		rawEntity = ReadString("Assets/gameData/entities.json");
 		rawRecipes = ReadString("Assets/gameData/recipes.json");
 		rawLevels = ReadString("Assets/gameData/levels.json");
+		rawSettings = ReadString("Assets/gameData/basesetting.json");
 		entityCollection = JsonUtility.FromJson<entityCollection>(rawEntity);
 		recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
 		levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
+		gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);
 
 	}
 
@@ -65,13 +68,13 @@ public class cattyLabDictionaty : MonoBehaviour{
 		try{
 			tmp.id = id;
 			tmp.name = entityCollection.items[id].name;
-			tmp.level = entityCollection.items[id].level;
+			tmp.rarity = entityCollection.items[id].rarity;
 			tmp.price = entityCollection.items[id].price;
 			tmp.description = entityCollection.items[id].description;
 		}catch(Exception e){
 			tmp.id = id;
 			tmp.name = "NOTHING!!!!";
-			tmp.level = -1;
+			tmp.rarity = -1;
 			tmp.price = -1;
 			tmp.description = "U DON FKED UP:<br>" + e.Message;
 		}
@@ -139,6 +142,11 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public 	int GetTotalItemCount(){
 		return entityCollection.items.Length;
 	}
+
+	public double GetPossibleBonus()
+	{
+		return gameSettings.possibleBonus;
+	}
 }
 
 [Serializable]
@@ -158,4 +166,11 @@ public class recipeCollection
 public class levelCollection
 {
 	public levels[] levels;
+}
+
+[Serializable]
+public class CLGameSettings
+{
+	public int maxGroupCount;
+	public double possibleBonus;
 }

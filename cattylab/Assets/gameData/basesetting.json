@@ -1,4 +1,4 @@
 {
     "maxGroupCount" : 3,
-    "baseTravelTime" : 10
+    "possibleBonus" : 5
 }
