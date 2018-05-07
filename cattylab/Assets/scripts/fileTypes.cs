@@ -181,6 +181,7 @@ public class levels
     }
 }
 
+[System.Serializable]
 public class loots
 {   
     public string type;

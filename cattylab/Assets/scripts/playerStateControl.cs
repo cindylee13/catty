@@ -14,7 +14,8 @@ public class playerStateControl : MonoBehaviour {
 	//  EVENTS
 	//-----------
 
-	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged, OnCraftingStarted, OnCraftingEnded, OnGroupDataChanged;
+	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged, OnCraftingStarted,
+	OnCraftingEnded, OnGroupDataChanged,OnExploreStarted, OnExploreEnded, OnLevelDataChanged;
 	public EventWithMessage EventNotifier;
 
 
@@ -36,6 +37,9 @@ public class playerStateControl : MonoBehaviour {
 		if(OnCraftingStarted == null) OnCraftingStarted = new UnityEvent();
 		if(OnCraftingEnded == null) OnCraftingEnded = new UnityEvent();
 		if(OnGroupDataChanged == null) OnGroupDataChanged = new UnityEvent();
+		if(OnExploreEnded == null) OnExploreEnded = new UnityEvent();
+		if(OnExploreStarted == null) OnExploreStarted = new UnityEvent();
+		if(OnLevelDataChanged == null) OnLevelDataChanged = new UnityEvent();
 		OnGameInitialize.AddListener(OnGameInitializehandler);
 
 
@@ -62,8 +66,10 @@ public class playerStateControl : MonoBehaviour {
 		OnItemDataChanged.Invoke();
 		OnGroupDataChanged.Invoke();
 		if(overallData.gameData.isCrafting){
-			OnCraftingStarted.Invoke();
 			StartCoroutine(StartCraftingClock());
+		}
+		foreach(exploreGroups eG in overallData.gameData.exploreGroups){
+			StartCoroutine(StartExploreClock(eG));
 		}
 	}
 
@@ -119,6 +125,7 @@ public class playerStateControl : MonoBehaviour {
 		get{
 			return overallData.gameData.unlockScore;
 		}
+		private set{}
 	}
 
 	public bool canSendGroup{
@@ -139,10 +146,15 @@ public class playerStateControl : MonoBehaviour {
 		}
 	}
 
-	public void SendGroup(exploreGroups eG){
+	public bool SendGroup(int[] crew,int levelID){
+		exploreGroups eG = new exploreGroups();
+		eG.crews = crew;
+		eG.destination = levelID;
+		eG.groupName = "Group " + (groupCount + 1);
+		eG.ETC = ConvertToUnixTimestamp(System.DateTime.Now) + CLD.GetLevelByID(levelID).distance;
 		if(!canSendGroup){
 			Debug.LogError("CAN'T SEND MORE GROUP FUCKER");
-			return;
+			return false;
 		}
 		int count = 0;
 		for(int i = 0; i < eG.crews.Length;i++){
@@ -157,7 +169,9 @@ public class playerStateControl : MonoBehaviour {
 			}
 		}
 		overallData.gameData.exploreGroups.Add(eG);
-		StartExploreClock(eG);
+		StartCoroutine(StartExploreClock(eG));
+		Debug.Log("Explore Started");
+		return true;
 	}
 
 	public bool CatControl(int id, int amount, CatControlType type){
@@ -228,7 +242,7 @@ public class playerStateControl : MonoBehaviour {
 			}
 		}
 			if(success) OnCatDataChaged.Invoke();
-			else Debug.LogError("U DON FKED UP");
+			else Debug.LogError("U DON FKED UP ID:" + id + " AMOUNT:" + amount + " TYPE:" + type);
 			return success;
 	}
 
@@ -329,7 +343,6 @@ public class playerStateControl : MonoBehaviour {
 		StartCoroutine(StartCraftingClock());
 		OnCatDataChaged.Invoke();
 		OnItemDataChanged.Invoke();
-		OnCraftingStarted.Invoke();
 	}
 
 	void CraftingEnded(){
@@ -349,10 +362,13 @@ public class playerStateControl : MonoBehaviour {
 	}
 
 	private void ExploreEnded(int indexInList){
+		Debug.Log("Explore Ended");
 		exploreGroups eG = overallData.gameData.exploreGroups[indexInList];
 		levels lvl = CLD.GetLevelByID(eG.destination);
-		List<Ientity> loots = new List<Ientity>(CaculateLoots(lvl, eG.crews));
+		List<Ientity> loots = new List<Ientity>(CalculateLoots(lvl, eG.crews));
+		bool explored = false;
 		int count = 0;
+		//return cats to count
 		for(int i=0;i<eG.crews.Length;i++){
 			if(i==0 || eG.crews[i]==eG.crews[i-1]){
 				count++;
@@ -364,12 +380,53 @@ public class playerStateControl : MonoBehaviour {
 				CatControl(eG.crews[i], count, CatControlType.avaliable);
 			}
 		}
-
+		//adding loots to inventory
+		for(int i = 0 ;i < loots.Count;i++){
+			Debug.Log("aye" + loots[i].GetType());
+			count = 1;
+			for(int j = i + 1 ; j < loots.Count; j++){
+				Debug.Log("aye" + loots[j].GetType());
+				if(loots[i].GetType() == loots[j].GetType() && loots[i].id == loots[j].id){
+					Debug.Log("DIE");
+					count++;
+					loots.RemoveAt(j);
+					j--;
+				}
+			}
+			if(loots[i].GetType()==typeof(catData)){
+					CatControl(loots[i].id, count, CatControlType.count);
+			}else{
+					ItemControl(loots[i].id, count);
+			}
+		}
+		//setting explored level
+		foreach(exploredLevels exLvl in overallData.gameData.exploredLevels){
+			if(exLvl.id == lvl.id){
+				exLvl.rate += lvl.rate;
+				explored = true;
+				if(exLvl.rate >= 100){
+					unlockScore++;
+				}
+			}
+		}
+		if(!explored){
+			exploredLevels exLvl = new exploredLevels();
+			exLvl.id = lvl.id;
+			exLvl.rate = lvl.rate;
+			overallData.gameData.exploredLevels.Add(exLvl);
+			if(exLvl.rate >= 100){
+					unlockScore++;
+			}
+		}
+		overallData.gameData.exploreGroups.RemoveAt(indexInList);
+		OnLevelDataChanged.Invoke();
+		OnGroupDataChanged.Invoke();
+		OnExploreEnded.Invoke();
 	}
 
-	private Ientity[] CaculateLoots(levels levels, int[] catIDs){
+	private Ientity[] CalculateLoots(levels level, int[] catIDs){
 		List<Ientity> loots = new List<Ientity>();
-		List<loots> possibleLoots = new List<loots>(levels.loots);
+		List<loots> possibleLoots = new List<loots>(level.loots);
 		foreach(int ID in catIDs){
 			Ientity bestLoot = null;
 			catData cat = CLD.GetCatData(ID);
@@ -385,19 +442,23 @@ public class playerStateControl : MonoBehaviour {
 					bestLoot = lootCand;
 				}
 			}
-			loots.Add(bestLoot);
+			if(bestLoot!=null)loots.Add(bestLoot);
 		}
 		return loots.ToArray();
 	}
 
 
 	private IEnumerator StartCraftingClock(){
+		OnCraftingStarted.Invoke();
 		yield return new WaitForSecondsRealtime((int)(overallData.gameData.craftETC - ConvertToUnixTimestamp(System.DateTime.Now)));
 		CraftingEnded();
 	}
 
 	private IEnumerator StartExploreClock(exploreGroups eG){
+		Debug.Log("SEC Started ETC:" + (eG.ETC - ConvertToUnixTimestamp(System.DateTime.Now)));
+		OnExploreStarted.Invoke();
 		yield return new WaitForSecondsRealtime((int)(eG.ETC - ConvertToUnixTimestamp(System.DateTime.Now)));
+		Debug.Log("SEC Ended");
 		for(int i = 0; i< overallData.gameData.exploreGroups.Count;i++){
 			if(IsSame(overallData.gameData.exploreGroups[i], eG)){
 				ExploreEnded(i);

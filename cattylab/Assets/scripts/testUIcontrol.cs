@@ -38,6 +38,7 @@ public class testUIcontrol : MonoBehaviour {
 		submitRecipeBtn.onClick.AddListener(SubmitRecipeBtnTask);
 		addCrewBtn.onClick.AddListener(AddCrewBtnTask);
 		resetCrewBtn.onClick.AddListener(ResetCrewBtnTask);
+		sendCrewBtn.onClick.AddListener(SendCrewBtnTask);
 		levelDropdown.onValueChanged.AddListener(delegate{
 			LevelDropdownChanged();
 		});
@@ -53,6 +54,9 @@ public class testUIcontrol : MonoBehaviour {
 	//Button tasks
 	//------------
 
+	void SendCrewBtnTask(){
+		SendExploreGroup();
+	}
 
 	void MoneyBtnTask(){
 		int amount = Random.Range(-50,100);
@@ -145,9 +149,11 @@ public class testUIcontrol : MonoBehaviour {
 	void ChangeOwnedCatText(){
 		string outputText = "";
 		cat[] cats = overallStats.Ownedcats.ToArray();
-		outputText = string.Format("{0}: {1}  all:{2} avaliable:{3}",cats[0].id, CLD.GetCatName(cats[0].id), cats[0].count, cats[0].avaliable);
-		for(int i=1;i<cats.Length;i++){
-			outputText += string.Format("\n{0}: {1}  all:{2} avaliable:{3}",cats[i].id, CLD.GetCatName(cats[i].id), cats[i].count, cats[i].avaliable);
+		for(int i=0;i<cats.Length;i++){
+			if(i != 0){
+				outputText += "\n";
+			}
+			outputText += string.Format("{0}: {1}  all:{2} avaliable:{3}",cats[i].id, CLD.GetCatName(cats[i].id), cats[i].count, cats[i].avaliable);
 		}
 		ownedCatText.text = outputText;
 	}
@@ -216,7 +222,7 @@ public class testUIcontrol : MonoBehaviour {
 			int remains = i.count - MatchingEntityInList(itemOccupied, i.id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
-				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - MatchingEntityInList(catOccupied, i.id)) + ") ";
+				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - MatchingEntityInList(itemOccupied, i.id)) + ") ";
 				recipeOptions.Add(r_option);
 				recipeOptionData.Add(CLD.GetItemData(i.id));
 			}
@@ -229,6 +235,7 @@ public class testUIcontrol : MonoBehaviour {
 	}
 
 	void GetCrewDropdownList(){
+		crewOptionData.Clear();
 		crewOptions.Clear();
 		crewDropdown.ClearOptions();
 		crewOptions.Add(new Dropdown.OptionData("Select"));
@@ -250,6 +257,7 @@ public class testUIcontrol : MonoBehaviour {
 	}
 
 	private void InsertCatToReadyList(int valueInOptions){
+		Debug.Log("INSERTED: " + crewOptionData[valueInOptions - 1]);
 		if(valueInOptions==0) return;
 		crewReady.Add(crewOptionData[valueInOptions - 1]);
 		GetCrewDropdownList();
@@ -329,4 +337,19 @@ public class testUIcontrol : MonoBehaviour {
  	    System.TimeSpan diff = date - st;
 	    return System.Math.Floor(diff.TotalSeconds);
 	}
+
+	void SendExploreGroup(){
+		if(overallStats.SendGroup(crewReady.ToArray(), levelOptionData[levelDropdown.value - 1])){
+			ResetReadyList();
+		}
+	}
+
+	void ExploreDataChanged(){
+		levelDropdown.interactable = overallStats.canSendGroup;
+		crewDropdown.interactable = overallStats.canSendGroup;
+		addCrewBtn.interactable = overallStats.canSendGroup;
+		resetCrewBtn.interactable = overallStats.canSendGroup;
+		sendCrewBtn.interactable = overallStats.canSendGroup;
+	}
+
 }

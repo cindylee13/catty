@@ -3,7 +3,7 @@
         {
             "id":0,
             "name":"forest",
-            "distance":30,
+            "distance":3,
             "rate":20,
             "unlockScore":0,
             "loots":[

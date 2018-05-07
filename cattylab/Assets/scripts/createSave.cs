@@ -60,7 +60,10 @@ public class saveData
     }
 
     public void set(gameData data){
-        gameData = new gameData(data);
+        try{
+            gameData = new gameData(data);
+        }catch{
+            gameData = gameData.init;
+        }
     }
-
 }
