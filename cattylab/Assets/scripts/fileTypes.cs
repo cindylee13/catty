@@ -58,6 +58,7 @@ public class gameData
     }
 }
 
+[System.Serializable]
 public class exploredLevels{
     public int id;
     public int rate;

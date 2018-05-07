@@ -42,7 +42,6 @@ public class playerStateControl : MonoBehaviour {
 		if(OnLevelDataChanged == null) OnLevelDataChanged = new UnityEvent();
 		OnGameInitialize.AddListener(OnGameInitializehandler);
 
-
 		OnGameInitialize.Invoke();
 	}
 
@@ -144,6 +143,10 @@ public class playerStateControl : MonoBehaviour {
 		get{
 			return overallData.gameData.ownedItems;
 		}
+	}
+
+	public exploreGroups GetGroupData(int index){
+		return overallData.gameData.exploreGroups[index];
 	}
 
 	public bool SendGroup(int[] crew,int levelID){

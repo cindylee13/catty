@@ -9,7 +9,7 @@ public class testUIcontrol : MonoBehaviour {
 	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn,
 				  resetRecipeBtn, submitRecipeBtn, addCrewBtn, resetCrewBtn, sendCrewBtn;
 	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText,
-				recipeText, recipeETCText, crewReadyText, gcText, mgpcText, exploreCostText, exploreETCText;
+				recipeText, recipeETCText, crewReadyText, gcText, mgpcText, exploreCostText, exploreETCText, groupText;
 	public Dropdown recipeDropdown, crewDropdown, levelDropdown;
 	private List<Dropdown.OptionData> recipeOptions, crewOptions, levelOptions;
 	public cattyLabDictionaty CLD;
@@ -47,7 +47,7 @@ public class testUIcontrol : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		ChangeGroupText();//FUCK U
 	}
 
 	//------------
@@ -132,6 +132,20 @@ public class testUIcontrol : MonoBehaviour {
 	//------------
 	//Change Text
 	//------------
+
+	void ChangeGroupText(){
+		string outputText = "";
+		for(int i = 0 ; i < overallStats.groupCount; i++){
+			exploreGroups eG = overallStats.GetGroupData(i);
+			string crews = "";
+			foreach(int id in eG.crews){
+				crews += CLD.GetCatName(id);
+			}
+			if(i>0)outputText += "\n";
+			outputText += string.Format("{0} crews:{1} ETC:{2}",eG.groupName, crews, eG.ETC - ConvertToUnixTimestamp(System.DateTime.Now));
+		}
+		groupText.text = outputText;
+	}
 
 	void ChangeGCText(){
 		gcText.text = overallStats.groupCount +"/" + overallStats.maxGroupCount;
