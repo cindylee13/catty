@@ -6,20 +6,23 @@ using UnityEngine.UI;
 
 public class testUIcontrol : MonoBehaviour {
 	public playerStateControl overallStats;
-	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn, resetRecipeBtn, submitRecipeBtn;
-	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText, recipeText, recipeETCText;
-	public Dropdown recipeDropdown;
-	private List<Dropdown.OptionData> recipeOptions;
+	public Button moneeee, saveBtn, resetBtn, addCatBtn, addItemBtn, addRecipeBtn, resetRecipeBtn, submitRecipeBtn, addCrewBtn;
+	public Text moneyText, EventText, ownedCatText, ownedItemText, recipeCostText, recipeText, recipeETCText, crewReadyText, gcText, mgpcText;
+	public Dropdown recipeDropdown, crewDropdown;
+	private List<Dropdown.OptionData> recipeOptions, crewOptions;
 	public cattyLabDictionaty CLD;
-	private List<int> catOccupied, itemOccupied;
+	private List<int> catOccupied, itemOccupied, crewOptionData, crewReady;
 	private List<Ientity> recipeOptionData;
 
 	// Use this for initialization
 	void Start () {
 		recipeOptionData = new List<Ientity>();
+		crewOptionData = new List<int>();
 		catOccupied = new List<int>();
 		itemOccupied = new List<int>();
 		recipeOptions = new List<Dropdown.OptionData>();
+		crewOptions = new List<Dropdown.OptionData>();
+		crewReady = new List<int>();
 		moneeee.onClick.AddListener(MoneyBtnTask);
 		saveBtn.onClick.AddListener(SaveBtnTask);
 		resetBtn.onClick.AddListener(ResetBtnTask);
@@ -29,6 +32,7 @@ public class testUIcontrol : MonoBehaviour {
 		addRecipeBtn.onClick.AddListener(AddRecipeBtnTask);
 		resetRecipeBtn.onClick.AddListener(resetRecipeBtnTask);
 		submitRecipeBtn.onClick.AddListener(SubmitRecipeBtnTask);
+		addCrewBtn.onClick.AddListener(AddCrewBtnTask);
 
 	}
 	
@@ -40,6 +44,7 @@ public class testUIcontrol : MonoBehaviour {
 	//------------
 	//Button tasks
 	//------------
+
 
 	void MoneyBtnTask(){
 		int amount = Random.Range(-50,100);
@@ -64,6 +69,16 @@ public class testUIcontrol : MonoBehaviour {
 		int itemId = Random.Range(0,3);
 		Debug.Log("Adding Item id:" + itemId);
 		overallStats.ItemControl(itemId, 1);
+	}
+
+	void AddCrewBtnTask(){
+		InsertCatToReadyList(crewDropdown.value);
+		crewReadyText.text = "";
+		foreach(int cid in crewReady){
+			crewReadyText.text += cid + " ";
+		}
+		mgpcText.text = string.Format("({0}/{1})", crewReady.Count, overallStats.maxGroupPplCount);
+		addCrewBtn.interactable = overallStats.maxGroupPplCount > crewReady.Count;
 	}
 
 	void AddRecipeBtnTask(){
@@ -99,6 +114,11 @@ public class testUIcontrol : MonoBehaviour {
 	//Change Text
 	//------------
 
+	void ChangeGCText(){
+		gcText.text = overallStats.groupCount +"/" + overallStats.maxGroupCount;
+		mgpcText.text ="(" + overallStats.maxGroupPplCount + ")";
+	}
+
 	void ChangeMoneyText(){
 		moneyText.text = "$" + overallStats.money ;
 	}
@@ -129,9 +149,7 @@ public class testUIcontrol : MonoBehaviour {
 
 	void GetRecipeDropdownList(){
 		recipeOptionData.Clear();
-		recipeOptionData.TrimExcess();
 		recipeOptions.Clear();
-		recipeOptions.TrimExcess();
 		recipeDropdown.ClearOptions();
 		recipeOptions.Add(new Dropdown.OptionData("Select"));
 		foreach(cat c in overallStats.Ownedcats){
@@ -159,6 +177,33 @@ public class testUIcontrol : MonoBehaviour {
 		recipeDropdown.RefreshShownValue();
 	}
 
+	void GetCrewDropdownList(){
+		crewOptions.Clear();
+		crewDropdown.ClearOptions();
+		crewOptions.Add(new Dropdown.OptionData("Select"));
+		foreach(cat c in overallStats.Ownedcats){
+			int remains = c.avaliable - MatchingEntityInList(crewReady, c.id);
+			if(remains > 0){
+				Dropdown.OptionData c_option = new Dropdown.OptionData();
+				c_option.text = CLD.GetCatName(c.id) + "  (" + remains + ") ";
+				crewOptions.Add(c_option);
+				crewOptionData.Add(c.id);
+			}
+		}
+		foreach(Dropdown.OptionData message in crewOptions){
+			crewDropdown.options.Add(message);
+		}
+		crewDropdown.value = 0;
+		crewDropdown.RefreshShownValue();
+
+	}
+
+	private void InsertCatToReadyList(int valueInOptions){
+		if(valueInOptions==0) return;
+		crewReady.Add(crewOptionData[valueInOptions - 1]);
+		GetCrewDropdownList();
+	}
+
 	private void InsertEntityToOccupyList(int valueInOptions){
 		if(valueInOptions == 0) return;
 		if(recipeOptionData[valueInOptions-1].GetType() == typeof(catData)){
@@ -174,9 +219,12 @@ public class testUIcontrol : MonoBehaviour {
 	public void ResetOccupyList(){
 		catOccupied.Clear();
 		itemOccupied.Clear();
-		catOccupied.TrimExcess();
-		itemOccupied.TrimExcess();
 		GetRecipeDropdownList();// reset the dropdown list
+	}
+
+	public void ResetReadyList(){
+		crewReady.Clear();
+		GetCrewDropdownList();
 	}
 
 	public void ResetRecipe(){
@@ -189,6 +237,8 @@ public class testUIcontrol : MonoBehaviour {
 
 	public void SubmitRecipe(){
 		recipeData s_recipe = CLD.FindRecipeResultData(catOccupied.ToArray(), itemOccupied.ToArray());
+		ResetOccupyList();
+		ResetReadyList();
 		overallStats.SendMessage("SubmitRecipe", s_recipe.id);
 	}
 

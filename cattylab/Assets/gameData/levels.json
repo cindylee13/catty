@@ -1,0 +1,27 @@
+{
+    "levels":[
+        {
+            "id":0,
+            "name":"forest",
+            "distance":0,
+            "rate":20,
+            "unlockScore":0,
+            "loots":[
+                {"type":"item", "id":1, "pos":70},
+                {"type":"item", "id":2, "pos":50},
+                {"type":"cat", "id":1, "pos":40},
+                {"type":"cat", "id":2, "pos":20}
+            ]
+        },
+        {
+            "id":1,
+            "name":"forest 2",
+            "distance":0,
+            "rate":20,
+            "unlockScore":0,
+            "loots":[
+                {"type":"item", "id":3, "pos":20}
+            ]
+        }
+    ]
+}

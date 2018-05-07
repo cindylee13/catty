@@ -38,7 +38,7 @@ public class gameData
         money = data.money;
         maxGroupCount = data.maxGroupCount;
         maxCats = data.maxCats;
-        maxGroupPplCount = data.maxGroupCount;
+        maxGroupPplCount = data.maxGroupPplCount;
         unlockScore = data.unlockScore;
         ownedCats = new List<cat>(data.ownedCats);
         ownedItems = new List<item>(data.ownedItems);

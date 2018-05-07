@@ -14,7 +14,7 @@ public class playerStateControl : MonoBehaviour {
 	//  EVENTS
 	//-----------
 
-	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged, OnCraftingStarted, OnCraftingEnded;
+	public UnityEvent OnMoneyChanged, OnGameInitialize, OnCatDataChaged, OnItemDataChanged, OnCraftingStarted, OnCraftingEnded, OnGroupDataChanged;
 	public EventWithMessage EventNotifier;
 
 
@@ -35,6 +35,7 @@ public class playerStateControl : MonoBehaviour {
 		if(OnItemDataChanged == null) OnItemDataChanged = new UnityEvent();
 		if(OnCraftingStarted == null) OnCraftingStarted = new UnityEvent();
 		if(OnCraftingEnded == null) OnCraftingEnded = new UnityEvent();
+		if(OnGroupDataChanged == null) OnGroupDataChanged = new UnityEvent();
 		OnGameInitialize.AddListener(OnGameInitializehandler);
 
 
@@ -59,6 +60,7 @@ public class playerStateControl : MonoBehaviour {
 		OnCatDataChaged.Invoke();
 		OnMoneyChanged.Invoke();
 		OnItemDataChanged.Invoke();
+		OnGroupDataChanged.Invoke();
 		if(overallData.gameData.isCrafting){
 			OnCraftingStarted.Invoke();
 			StartCoroutine(StartCraftingClock());
@@ -76,7 +78,6 @@ public class playerStateControl : MonoBehaviour {
 		EventNotifier.Invoke("Data Saved");
 	}
 
-	
 
 	public bool isCrafting{
 		get{
@@ -93,6 +94,12 @@ public class playerStateControl : MonoBehaviour {
 	public long money{
 		get{
 			return overallData.gameData.money;
+		}
+	}
+
+	public int groupCount{
+		get{
+			return overallData.gameData.exploreGroups.Count;
 		}
 	}
 
