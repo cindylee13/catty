@@ -7,9 +7,10 @@ using UnityEngine;
 [System.Serializable]
 public class cattyLabDictionaty : MonoBehaviour{
 
-	private string rawEntity,rawRecipes;
-	private entityCollection entities = new entityCollection();
-	private recipeCollection recipes = new recipeCollection();
+	private string rawEntity,rawRecipes,rawLevels;
+	private entityCollection entityCollection = new entityCollection();
+	private recipeCollection recipeCollection = new recipeCollection();
+	private levelCollection levelCollection = new levelCollection();
 
 	public cattyLabDictionaty(){
 		start();
@@ -18,14 +19,16 @@ public class cattyLabDictionaty : MonoBehaviour{
 	void start(){
 		rawEntity = ReadString("Assets/gameData/entities.json");
 		rawRecipes = ReadString("Assets/gameData/recipes.json");
-		entities = JsonUtility.FromJson<entityCollection>(rawEntity);
-		recipes = JsonUtility.FromJson<recipeCollection>(rawRecipes);
+		rawLevels = ReadString("Assets/gameData/levels.json");
+		entityCollection = JsonUtility.FromJson<entityCollection>(rawEntity);
+		recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
+		levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
 
 	}
 
 	public string GetCatName(int id){
 		try{
-			return entities.cats[id].name;
+			return entityCollection.cats[id].name;
 		}catch{
 			return "ERRORCAT";
 		}
@@ -35,10 +38,10 @@ public class cattyLabDictionaty : MonoBehaviour{
 		catData tmp = new catData();
 		try{
 			tmp.id = id;
-			tmp.name = entities.cats[id].name;
-			tmp.level = entities.cats[id].level;
-			tmp.price = entities.cats[id].price;
-			tmp.description = entities.cats[id].description;
+			tmp.name = entityCollection.cats[id].name;
+			tmp.level = entityCollection.cats[id].level;
+			tmp.price = entityCollection.cats[id].price;
+			tmp.description = entityCollection.cats[id].description;
 		}catch(Exception e){
 			tmp.id = id;
 			tmp.name = "ERRORCAT";
@@ -51,7 +54,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 
 	public string GetItemName(int id){
 		try{
-			return entities.items[id].name;
+			return entityCollection.items[id].name;
 		}catch{
 			return "NOTHING!!!!";
 		}
@@ -61,10 +64,10 @@ public class cattyLabDictionaty : MonoBehaviour{
 		itemData tmp = new itemData();
 		try{
 			tmp.id = id;
-			tmp.name = entities.items[id].name;
-			tmp.level = entities.items[id].level;
-			tmp.price = entities.items[id].price;
-			tmp.description = entities.items[id].description;
+			tmp.name = entityCollection.items[id].name;
+			tmp.level = entityCollection.items[id].level;
+			tmp.price = entityCollection.items[id].price;
+			tmp.description = entityCollection.items[id].description;
 		}catch(Exception e){
 			tmp.id = id;
 			tmp.name = "NOTHING!!!!";
@@ -87,7 +90,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 	{
 		Array.Sort(cats);
 		Array.Sort(items);
-		foreach(recipeData rD in recipes.recipes){
+		foreach(recipeData rD in recipeCollection.recipes){
 			if(cats.SequenceEqual(rD.cats) && items.SequenceEqual(rD.items)){
 				return rD;
 			}
@@ -96,25 +99,45 @@ public class cattyLabDictionaty : MonoBehaviour{
 	}
 
 	public double GetRecipeTime(int id){
-		return (double) recipes.recipes[id].time;
+		return (double) recipeCollection.recipes[id].time;
 	}
 
 	public int GetRecipeCost(int id){
-		return recipes.recipes[id].cost;
+		return recipeCollection.recipes[id].cost;
 	}
 
 	public recipeData GetRecipeByID(int id){
-		return recipes.recipes[id];
+		return recipeCollection.recipes[id];
 	}
 
 	public Ientity GetEntityByRecipeID(int id){
-		recipeData rD = recipes.recipes[id];
+		recipeData rD = recipeCollection.recipes[id];
 		if(rD.type=="cat"){
 			return GetCatData(rD.r_id);
 		}else if(rD.type=="item"){
 			return GetItemData(rD.r_id);
 		}
 		return null;
+	}
+
+	public levels GetLevelByID(int id){
+		levels lv = levelCollection.levels[id];
+		return lv;
+	}
+
+	public string GetLevelNameByID(int id){
+		return 	levelCollection.levels[id].name;
+	}
+
+	public int GetTotalLevelCount(){
+		return levelCollection.levels.Length;
+	}
+
+	public int GetTotalCatCount(){
+		return entityCollection.cats.Length;
+	}
+	public 	int GetTotalItemCount(){
+		return entityCollection.items.Length;
 	}
 }
 
@@ -129,4 +152,10 @@ public class entityCollection
 public class recipeCollection
 {
 	public recipeData[] recipes;
+}
+
+[Serializable]
+public class levelCollection
+{
+	public levels[] levels;
 }

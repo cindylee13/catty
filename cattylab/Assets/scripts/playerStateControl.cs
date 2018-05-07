@@ -115,6 +115,12 @@ public class playerStateControl : MonoBehaviour {
 		}
 	}
 
+	public int unlockScore{
+		get{
+			return overallData.gameData.unlockScore;
+		}
+	}
+
 	public List<cat> Ownedcats{
 		get{
 			return overallData.gameData.ownedCats;

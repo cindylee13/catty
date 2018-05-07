@@ -131,7 +131,7 @@ public class itemData:Ientity
 }
 
 [System.Serializable]
-public struct exploreGroups
+public class exploreGroups
 {
     public string groupName;
     public int[] crews; //ids of each cat
@@ -140,13 +140,28 @@ public struct exploreGroups
     public int destination;
 }
 
-public struct levels
+[System.Serializable]
+public class levels
 {
     public int id;
     public string name;
     public int distance;
     public int rate;
     public int unlockScore;
+
+    public loots[] loots;
+
+    public bool avaliable(int score)
+    {
+        return score >= unlockScore;
+    }
+}
+
+public class loots
+{   
+    public string type;
+    public int id;
+    public double pos;
 }
 
 [System.Serializable]
