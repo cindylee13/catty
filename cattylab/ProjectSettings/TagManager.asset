@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Camera
+=======
+  - touchable
+>>>>>>> f270fe8415e7c071e574c405550ad2e57c3ddbd5
   layers:
   - Default
   - TransparentFX
