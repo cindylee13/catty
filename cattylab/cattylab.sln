@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cattylab", "Assembly-CSharp.csproj", "{A3991632-0DD4-7E4B-BF6F-8FFD85E65529}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cattylab", "cattylab.csproj", "{7C3E05E5-FB1E-6F28-68EF-8952517F4B46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A3991632-0DD4-7E4B-BF6F-8FFD85E65529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3991632-0DD4-7E4B-BF6F-8FFD85E65529}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3991632-0DD4-7E4B-BF6F-8FFD85E65529}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3991632-0DD4-7E4B-BF6F-8FFD85E65529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C3E05E5-FB1E-6F28-68EF-8952517F4B46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C3E05E5-FB1E-6F28-68EF-8952517F4B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C3E05E5-FB1E-6F28-68EF-8952517F4B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C3E05E5-FB1E-6F28-68EF-8952517F4B46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal
