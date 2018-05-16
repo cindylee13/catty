@@ -35,8 +35,8 @@ public class CameraControl : MonoBehaviour {
             float distCovered = (Time.time - _startTime) * speed;
             float fracJourney = distCovered / _journeyLength;
             _camera.transform.position = Vector3.Lerp(_startMarker.position,GetPositionForCamera(_nowPosition), fracJourney);
-            Debug.Log(_nowPosition.transform.position);
-            Debug.Log(Vector3.Lerp(_startMarker.position,GetPositionForCamera(_nowPosition), fracJourney));
+            //Debug.Log(_nowPosition.transform.position);
+            //Debug.Log(Vector3.Lerp(_startMarker.position,GetPositionForCamera(_nowPosition), fracJourney));
         }
     }
     public void moveCameraToCatLab()

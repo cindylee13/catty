@@ -10,6 +10,7 @@ public class UI_ListCtrl : MonoBehaviour {
 	private List<GameObject> _listItemObjects = new List<GameObject>();
 	public List<ListItemData> _listItemData = new List<ListItemData>();
 	private Transform _listOriginalPosition;
+	private bool _isMoving = false;
 
 	// Use this for initialization
 	void Start () {
@@ -58,6 +59,15 @@ public class UI_ListCtrl : MonoBehaviour {
 	public Transform ListOrigin{
 		get{
 			return _listOriginalPosition;
+		}
+	}
+
+	public bool IsMoving{
+		get{
+			return _isMoving;
+		}
+		set{
+			_isMoving = value;
 		}
 	}
 
