@@ -3324,6 +3324,8 @@ MonoBehaviour:
   _craftingList: {fileID: 1223018885}
   y: 8.5
   speed: 0.5
+  overallStats: {fileID: 0}
+  cat: {fileID: 1763391445632104, guid: 323aaa8b54d481f43ad77db037f37308, type: 2}
 --- !u!4 &2041108996 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4259971312409594, guid: f39c54814b08c624ea2a58461d87dba5,
