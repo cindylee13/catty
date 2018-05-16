@@ -13,7 +13,7 @@ public class UI_ListCtrl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_listOriginalPosition = transform;
+		//_listOriginalPosition = transform;
 		if(_spriteFinder == null){
 			_spriteFinder = GameObject.Find("AssetFinder").GetComponent<spriteFinder>();
 		}
@@ -53,6 +53,12 @@ public class UI_ListCtrl : MonoBehaviour {
 			Destroy(go.gameObject);
 		}
 		_listItemObjects.Clear();
+	}
+
+	public Transform ListOrigin{
+		get{
+			return _listOriginalPosition;
+		}
 	}
 
 

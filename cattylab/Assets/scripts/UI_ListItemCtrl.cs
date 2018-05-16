@@ -14,7 +14,9 @@ public class UI_ListItemCtrl : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		if(EntityNameText != null)
 		EntityNameText = gameObject.transform.Find("BG/EntityTitle").GetComponent<Text>();
+		if(MiscText != null)
 		MiscText = gameObject.transform.Find("BG/Misc").GetComponent<Text>();
 		Esr = gameObject.transform.Find("BG/EntitySprite").GetComponent<Image>();
 		EntityNameText.text = EntityName;
