@@ -293,7 +293,7 @@ public class playerStateControl : MonoBehaviour {
 	}
 
 
-	void changeMoney(int amount){
+	public void changeMoney(int amount){
 		overallData.gameData.money += amount;
 		OnMoneyChanged.Invoke();
 		string message;
