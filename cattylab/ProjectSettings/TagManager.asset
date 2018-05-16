@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - touchable
+  - scrollable
   layers:
   - Default
   - TransparentFX

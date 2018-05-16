@@ -5,6 +5,7 @@ using UnityEngine;
 public class walkingCats : MonoBehaviour {
 
 	public float _walkingInterval = 0.5f;
+	public playerStateControl _overallData;
 	public spriteFinder _spriteFinder;
 	public int _catID;
 	public GameObject _loot;
@@ -15,9 +16,13 @@ public class walkingCats : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if(_overallData == null){
+			Debug.Log("player stat controller not found, finding ctrler");
+			_overallData = GameObject.Find("OverallData").GetComponent<playerStateControl>();
+		}
 		if(_spriteFinder == null){
 			Debug.Log("Finder not found, finding finder");
-			GameObject.Find("AssetFinder").GetComponent<spriteFinder>();
+			_spriteFinder = GameObject.Find("AssetFinder").GetComponent<spriteFinder>();
 		}
 		_anim = this.gameObject.transform.GetChild(0).GetComponent<Animator>();
 		_sr = this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -62,10 +67,16 @@ public class walkingCats : MonoBehaviour {
 		isWalking = false;
 	}
 
-	void OnSelected(){
+	public void OnSelected(){
 		Debug.Log("Meow");
 		_anim.Play("cr_cat_touched");
-		if(Random.Range(0,10) < 3)
-		Instantiate(_loot, this.gameObject.transform.GetChild(1).transform.position, new Quaternion());
+		if(Random.Range(0,10) < 3){
+			_overallData.changeMoney(10);
+			Instantiate(_loot, this.gameObject.transform.GetChild(1).transform.position, new Quaternion());
+		}
+	}
+
+	public void OnReleased(){
+		
 	}
 }
