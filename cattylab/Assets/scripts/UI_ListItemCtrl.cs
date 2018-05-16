@@ -10,16 +10,16 @@ public class UI_ListItemCtrl : MonoBehaviour {
 	public Sprite EntitySprite;
 	private Text EntityNameText;
 	private Text MiscText;
-	private SpriteRenderer Esr;
+	private Image Esr;
 	
 	// Use this for initialization
 	void Start () {
-		EntityNameText = gameObject.transform.Find("Canvas/EntityName").GetComponent<Text>();
-		MiscText = gameObject.transform.Find("Canvas/EntityStuff").GetComponent<Text>();
-		Esr = gameObject.transform.Find("EntitySprite").GetComponent<SpriteRenderer>();
+		EntityNameText = gameObject.transform.Find("BG/EntityTitle").GetComponent<Text>();
+		MiscText = gameObject.transform.Find("BG/Misc").GetComponent<Text>();
+		Esr = gameObject.transform.Find("BG/EntitySprite").GetComponent<Image>();
 		EntityNameText.text = EntityName;
 		MiscText.text = Misc;
-		Esr.sprite = EntitySprite;
+		if(EntitySprite != null)Esr.sprite = EntitySprite;
 	}
 	
 	// Update is called once per frame
