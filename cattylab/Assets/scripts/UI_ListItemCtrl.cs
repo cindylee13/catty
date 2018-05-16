@@ -8,29 +8,40 @@ public class UI_ListItemCtrl : MonoBehaviour{
 
 	public string EntityName;
 	public string Misc;
+	public Image EntityImage;
 	public Sprite EntitySprite;
 	public Button ActionButton;
-	private Text EntityNameText;
-	private Text MiscText;
-	private Image Esr;
+	public Text EntityNameText;
+	public Text MiscText;
+	public int orderInList;
+	public UI_Control MainController;
+	
 	
 	
 	// Use this for initialization
 	void Start () {
 		if(EntityNameText != null)
-		EntityNameText = gameObject.transform.Find("BG/EntityTitle").GetComponent<Text>();
-		if(MiscText != null)
-		MiscText = gameObject.transform.Find("BG/Misc").GetComponent<Text>();
-		Esr = gameObject.transform.Find("BG/EntitySprite").GetComponent<Image>();
-		if(EntityNameText != null)
 		EntityNameText.text = EntityName;
 		if(MiscText != null)
 		MiscText.text = Misc;
-		if(EntitySprite != null)Esr.sprite = EntitySprite;
+		if(EntitySprite != null)EntityImage.sprite = EntitySprite;
+		ActionButton.onClick.AddListener(ClickedActionButton);
+		if(Misc == "X0"){
+			ActionButton.enabled = false;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 			
 	}	
+
+	void ClickedActionButton(){
+		MainController.CraftingItemClicked(orderInList);
+	}
+
+	public void Die(){
+		Debug.Log("IMDED");
+		Destroy(gameObject);
+	}
 }

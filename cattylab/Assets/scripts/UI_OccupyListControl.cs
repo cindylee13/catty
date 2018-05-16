@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_ListCtrl : MonoBehaviour {
+public class UI_OccupyListControl : MonoBehaviour {
+
 	public GameObject _listItem;
 	public GameObject _list;
 	public float margin = 1000;
@@ -84,14 +85,4 @@ public class UI_ListCtrl : MonoBehaviour {
 			_isMoving = value;
 		}
 	}
-
-
-}
-
-public class ListItemData{
-	public string EntityName;
-	public string MiscData;
-	public string EntityType;
-	public int EntityID;
-
 }

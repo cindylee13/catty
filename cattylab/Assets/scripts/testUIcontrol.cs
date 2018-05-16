@@ -47,7 +47,7 @@ public class testUIcontrol : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		ChangeGroupText();//FUCK U
+		//ChangeGroupText();//FUCK U
 	}
 
 	//------------
