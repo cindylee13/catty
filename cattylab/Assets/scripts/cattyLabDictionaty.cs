@@ -101,6 +101,10 @@ public class cattyLabDictionaty : MonoBehaviour{
 		return null;
 	}
 
+	public recipeData FindRecipeResultData(List<int> cats, List<int> items){
+		return FindRecipeResultData(cats.ToArray(), items.ToArray());
+	}
+
 	public double GetRecipeTime(int id){
 		return (double) recipeCollection.recipes[id].time;
 	}

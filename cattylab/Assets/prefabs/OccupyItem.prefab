@@ -54,6 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224395952324954606}
+  - component: {fileID: 114749047179991724}
   m_Layer: 0
   m_Name: OccupyItem
   m_TagString: Untagged
@@ -225,6 +226,26 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114749047179991724
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1504578478227590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2e116d7adca4d4797359414f36cffe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EntityName: 
+  Misc: 
+  EntityImage: {fileID: 114640689891754168}
+  EntitySprite: {fileID: 0}
+  ActionButton: {fileID: 114482693140920630}
+  EntityNameText: {fileID: 0}
+  MiscText: {fileID: 0}
+  orderInList: 0
+  MainController: {fileID: 0}
 --- !u!114 &114913137695091406
 MonoBehaviour:
   m_ObjectHideFlags: 1
