@@ -174,6 +174,7 @@ public class playerStateControl : MonoBehaviour {
 		overallData.gameData.exploreGroups.Add(eG);
 		StartCoroutine(StartExploreClock(eG));
 		Debug.Log("Explore Started");
+		EventNotifier.Invoke("Explore Started");
 		return true;
 	}
 
@@ -371,6 +372,7 @@ public class playerStateControl : MonoBehaviour {
 		List<Ientity> loots = new List<Ientity>(CalculateLoots(lvl, eG.crews));
 		bool explored = false;
 		int count = 0;
+		string lootText = "";
 		//return cats to count
 		for(int i=0;i<eG.crews.Length;i++){
 			if(i==0 || eG.crews[i]==eG.crews[i-1]){
@@ -398,8 +400,10 @@ public class playerStateControl : MonoBehaviour {
 			}
 			if(loots[i].GetType()==typeof(catData)){
 					CatControl(loots[i].id, count, CatControlType.count);
+					lootText += CLD.GetCatName(loots[i].id) + ", ";
 			}else{
 					ItemControl(loots[i].id, count);
+					lootText += CLD.GetItemName(loots[i].id) + ", ";
 			}
 		}
 		//setting explored level
@@ -422,9 +426,11 @@ public class playerStateControl : MonoBehaviour {
 			}
 		}
 		overallData.gameData.exploreGroups.RemoveAt(indexInList);
+		EventNotifier.Invoke("Explore Ended!");
 		OnLevelDataChanged.Invoke();
 		OnGroupDataChanged.Invoke();
 		OnExploreEnded.Invoke();
+		EventNotifier.Invoke("Got Loot: " + lootText);
 	}
 
 	private Ientity[] CalculateLoots(levels level, int[] catIDs){

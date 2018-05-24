@@ -55,12 +55,40 @@ public class cattyLabDictionaty : MonoBehaviour{
 		return tmp;
 	}
 
+	public List<catData> GetAllCats(){
+		List<catData> output = new List<catData>();
+		for(int i = 0 ; i < entityCollection.cats.Length ; i++){
+			catData tmp = new catData();
+			tmp.id = i;
+			tmp.name = entityCollection.cats[i].name;
+			tmp.level = entityCollection.cats[i].level;
+			tmp.price = entityCollection.cats[i].price;
+			tmp.description = entityCollection.cats[i].description;
+			output.Add(tmp);
+		}
+		return output;
+	}
+
 	public string GetItemName(int id){
 		try{
 			return entityCollection.items[id].name;
 		}catch{
 			return "NOTHING!!!!";
 		}
+	}
+
+	public List<itemData> GetAllItems(){
+		List<itemData> output = new List<itemData>();
+		for(int i = 0 ; i < entityCollection.items.Length ; i++){
+			itemData tmp = new itemData();
+			tmp.id = i;
+			tmp.name = entityCollection.items[i].name;
+			tmp.rarity = entityCollection.items[i].rarity;
+			tmp.price = entityCollection.items[i].price;
+			tmp.description = entityCollection.items[i].description;
+			output.Add(tmp);
+		}
+		return output;
 	}
 
 	public itemData GetItemData(int id){

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UI_Control : MonoBehaviour {
 	
 	public cattyLabDictionaty CLD;
+	private List<string> _pendingMessage;
+	private bool _isMessengerActive = false;
 	public playerStateControl overallData;
 	public List<Text> _moneyText;
 	public List<Text> _craftingTimeText;
@@ -16,20 +18,25 @@ public class UI_Control : MonoBehaviour {
 	public List<int> _catOccupied, _itemOccupied;
 	private List<ListItemData> _CraftlidList;
 	public Button _StartCraftingBtn;
-
+	public Animator messengerAnim;
+	public Text messengerText;
 	// Use this for initialization
 	void Start () {
+		_pendingMessage = new List<string>();
 		_CraftlidList = new List<ListItemData>();
 		_catOccupied = new List<int>();
 		_itemOccupied = new List<int>();
 		_StartCraftingBtn.interactable = false;
 		_StartCraftingBtn.onClick.AddListener(SendRecipe);
+		overallData.EventNotifier.AddListener(EventMessage);
 		ResetCraftingOccupy();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(!_isMessengerActive && _pendingMessage.Count > 0){
+			StartCoroutine(ShowPendingMessage());
+		}
 	}
 
 	void SendRecipe(){
@@ -163,19 +170,65 @@ public class UI_Control : MonoBehaviour {
 
 	string IntToTime(int seconds){
 		string output = "";
-		output = string.Format("{0}:{1}:{2}", saveDivide(seconds, 3600) ,saveDivide(seconds, 60) % 60,seconds % 60 );
+		if(saveDivide(seconds,3600) > 0)
+			output += saveDivide(seconds, 3600).ToString().PadLeft(2,'0') + ":";
+		if(saveDivide(seconds,60) > 0){
+			output += (saveDivide(seconds, 60) % 60).ToString().PadLeft(2,'0') + ":";
+		}
+		output += (seconds % 60).ToString().PadLeft(2,'0');
+		
 		return output;
 	}
 
 	int saveDivide(int t, int o){
 		int result = -1;
-		if(o == 0){
+		if(o == 0 || o > t){
 			return 0;
 		}
 		while(t > o * (++result));
 		return result;
 	}
+
+	public List<cat> GetCats(){
+		return overallData.Ownedcats;
+	}
+
+	public bool SendGroup(List<int> crew, int levelID){
+		return overallData.SendGroup(crew.ToArray(), levelID);
+	}
 	void ChangeGroupCount(){
 		
 	}
+
+	public void EventMessage(string text){
+		_pendingMessage.Add(text);
+	}
+
+	public int maxGroupPplCount{
+		get{
+			return overallData.maxGroupPplCount;
+		}
+	}
+
+	public int groupCount{
+		get{
+			return overallData.groupCount;
+		}
+	}
+
+	public int maxGroupCount{
+		get{
+			return overallData.maxGroupCount;
+		}
+	}
+
+	IEnumerator ShowPendingMessage(){
+		_isMessengerActive = true;
+		messengerText.text = _pendingMessage[0];
+		messengerAnim.Play("messenger_show");
+		_pendingMessage.RemoveAt(0);
+		yield return new WaitForSecondsRealtime(0.7f);
+		_isMessengerActive = false;
+	}
+
 }
