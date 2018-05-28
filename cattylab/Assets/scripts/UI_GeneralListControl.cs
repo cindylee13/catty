@@ -50,7 +50,7 @@ public class UI_GeneralListControl : MonoBehaviour {
 	public void RefreshItems(){
 		DestroyAllItems();
 		int Count = 0;
-		Debug.Log(_listItemData.Count);
+		//Debug.Log(_listItemData.Count);
 		foreach(ListItemData lid in _listItemData){
 			GameObject item;
 			item = Instantiate(_listItem,_list.transform, false) as GameObject;

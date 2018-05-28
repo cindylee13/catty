@@ -39,7 +39,7 @@ public class UI_GeneralListItemControl : MonoBehaviour {
 	}	
 
 	public void Die(){
-		Debug.Log("IMDED");
+		//Debug.Log("IMDED");
 		Destroy(gameObject);
 	}
 }

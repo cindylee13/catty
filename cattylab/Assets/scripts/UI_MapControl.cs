@@ -20,7 +20,9 @@ public class UI_MapControl : MonoBehaviour {
 	public float _listTransistionSpeed = 10;
 	public UI_Control _overallControl;
 	public Transform _originAnchor, _targetAnchor;
-	void Start () {
+	private bool _ready = false;
+	IEnumerator Start () {
+		yield return 0;
 		_occupyList.ItemClickedFunction = "OccupyItemClicked";
 		_groupList = _groupListObject.GetComponent<UI_GeneralListControl>();
 		_catOccupied = new List<int>();
@@ -30,10 +32,12 @@ public class UI_MapControl : MonoBehaviour {
 			Button btn  = tr.GetComponent<Button>();
 			btn.onClick.AddListener(delegate{OnButtonPressedAction(tr.gameObject);});
 		}
+		_ready = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!_ready) return;
 		setText();//FUCC U
 		_goBtn.interactable = CanSendGroup;
 	}

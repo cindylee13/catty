@@ -20,20 +20,25 @@ public class UI_Control : MonoBehaviour {
 	public Button _StartCraftingBtn;
 	public Animator messengerAnim;
 	public Text messengerText;
+	private bool _ready = false;
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
+		if(!CLD.IsReady){
+			yield return 0;
+		}
 		_pendingMessage = new List<string>();
 		_CraftlidList = new List<ListItemData>();
 		_catOccupied = new List<int>();
 		_itemOccupied = new List<int>();
 		_StartCraftingBtn.interactable = false;
 		_StartCraftingBtn.onClick.AddListener(SendRecipe);
-		overallData.EventNotifier.AddListener(EventMessage);
 		ResetCraftingOccupy();
+		_ready = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!_ready) return;
 		if(!_isMessengerActive && _pendingMessage.Count > 0){
 			StartCoroutine(ShowPendingMessage());
 		}
@@ -57,6 +62,8 @@ public class UI_Control : MonoBehaviour {
 	void RefreshCraftingList(){
 		//create Item data list
 		_CraftlidList.Clear();
+		Debug.Log(overallData);
+		if(overallData.Ownedcats == null) return;
 		foreach(cat c in overallData.Ownedcats){
 			ListItemData lid = new ListItemData();
 			lid.EntityID = c.id;

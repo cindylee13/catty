@@ -26,7 +26,7 @@ public class UI_EncControl : MonoBehaviour {
 		List<catData> allCats = new List<catData>(_overallControl.CLD.GetAllCats());
 		List<itemData> allItems = new List<itemData>(_overallControl.CLD.GetAllItems());
 		foreach(catData cD in allCats){
-			Debug.Log(cD.id);
+			//Debug.Log(cD.id);
 			ListItemData lid = new ListItemData();
 			lid.EntityID = cD.id;
 			lid.EntityType = "cat";

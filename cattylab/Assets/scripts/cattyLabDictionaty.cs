@@ -7,17 +7,43 @@ using UnityEngine;
 [System.Serializable]
 public class cattyLabDictionaty : MonoBehaviour{
 
-	private string rawEntity,rawRecipes,rawLevels,rawSettings;
+	private string rawEntity = "",rawRecipes = "",rawLevels = "",rawSettings ="";
 	private entityCollection entityCollection = new entityCollection();
 	private recipeCollection recipeCollection = new recipeCollection();
 	private levelCollection levelCollection = new levelCollection();
 	private CLGameSettings gameSettings = new CLGameSettings();
+	private bool _ready = false;
+	public TextAsset EntitieText, RecipeText, LevelText, SettingsText;
 
 	public cattyLabDictionaty(){
-		start();
+		//start();
+	}
+	void init(){
+		if(!_ready){
+			Debug.Log(EntitieText);
+			rawEntity = EntitieText.text;
+			rawRecipes = RecipeText.text;
+			rawLevels = LevelText.text;
+			rawSettings = SettingsText.text;
+			entityCollection = JsonUtility.FromJson<entityCollection>(rawEntity);
+			recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
+			levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
+			gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);
+			_ready = true;
+		}
+	}
+
+	public bool IsReady{
+		get{
+			return _ready;
+		}
 	}
 
 	void start(){
+		
+		Debug.Log("CLD START");
+		init();
+		/* 
 		rawEntity = ReadString("Assets/gameData/entities.json");
 		rawRecipes = ReadString("Assets/gameData/recipes.json");
 		rawLevels = ReadString("Assets/gameData/levels.json");
@@ -25,7 +51,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 		entityCollection = JsonUtility.FromJson<entityCollection>(rawEntity);
 		recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
 		levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
-		gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);
+		gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);*/
 
 	}
 
@@ -184,25 +210,25 @@ public class cattyLabDictionaty : MonoBehaviour{
 [Serializable]
 public class entityCollection
 {
-	public catData[] cats;
-	public itemData[] items;
+	public catData[] cats = new catData[0];
+	public itemData[] items = new itemData[0];
 }
 
 [Serializable]
 public class recipeCollection
 {
-	public recipeData[] recipes;
+	public recipeData[] recipes = new recipeData[0];
 }
 
 [Serializable]
 public class levelCollection
 {
-	public levels[] levels;
+	public levels[] levels = new levels[0];
 }
 
 [Serializable]
 public class CLGameSettings
 {
-	public int maxGroupCount;
-	public double possibleBonus;
+	public int maxGroupCount = 0;
+	public double possibleBonus = 0;
 }

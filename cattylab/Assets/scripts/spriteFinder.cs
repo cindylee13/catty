@@ -29,7 +29,7 @@ public class spriteFinder : MonoBehaviour {
 		}
 		
 		foundSprite = Resources.Load<Sprite>(path);
-		Debug.Log(foundSprite);
+		//Debug.Log(foundSprite);
 		if(foundSprite == null) return _notFound;
 		else return foundSprite;
 	}

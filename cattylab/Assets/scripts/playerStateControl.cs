@@ -20,9 +20,13 @@ public class playerStateControl : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
+		if(!CLD.IsReady){
+			yield return 0;
+		}
 		//load savefile on startup
 		overallData = new saveData();
+		overallData.gameData = new gameData(gameData.init);
 		Debug.Log("init");
 		if(!overallData.loadfile()){
 			overallData.set(gameData.init);
@@ -135,13 +139,15 @@ public class playerStateControl : MonoBehaviour {
 
 	public List<cat> Ownedcats{
 		get{
-			return overallData.gameData.ownedCats;
+			if(overallData == null) return null;
+			else return overallData.gameData.ownedCats;
 		}
 	}
 
 	public List<item> OwnedItems{
 		get{
-			return overallData.gameData.ownedItems;
+			if(overallData == null) return null;
+			else return overallData.gameData.ownedItems;
 		}
 	}
 
