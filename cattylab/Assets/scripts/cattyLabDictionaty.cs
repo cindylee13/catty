@@ -16,11 +16,9 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public TextAsset EntitieText, RecipeText, LevelText, SettingsText;
 
 	public cattyLabDictionaty(){
-		//start();
 	}
 	void init(){
 		if(!_ready){
-			Debug.Log(EntitieText);
 			rawEntity = EntitieText.text;
 			rawRecipes = RecipeText.text;
 			rawLevels = LevelText.text;
@@ -39,19 +37,9 @@ public class cattyLabDictionaty : MonoBehaviour{
 		}
 	}
 
-	void start(){
-		
+	void Start(){
 		Debug.Log("CLD START");
 		init();
-		/* 
-		rawEntity = ReadString("Assets/gameData/entities.json");
-		rawRecipes = ReadString("Assets/gameData/recipes.json");
-		rawLevels = ReadString("Assets/gameData/levels.json");
-		rawSettings = ReadString("Assets/gameData/basesetting.json");
-		entityCollection = JsonUtility.FromJson<entityCollection>(rawEntity);
-		recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
-		levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
-		gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);*/
 
 	}
 
