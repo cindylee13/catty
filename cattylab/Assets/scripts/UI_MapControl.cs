@@ -23,6 +23,7 @@ public class UI_MapControl : MonoBehaviour {
 	private bool _ready = false;
 	IEnumerator Start () {
 		yield return 0;
+		yield return 0;
 		_occupyList.ItemClickedFunction = "OccupyItemClicked";
 		_groupList = _groupListObject.GetComponent<UI_GeneralListControl>();
 		_catOccupied = new List<int>();
@@ -32,6 +33,7 @@ public class UI_MapControl : MonoBehaviour {
 			Button btn  = tr.GetComponent<Button>();
 			btn.onClick.AddListener(delegate{OnButtonPressedAction(tr.gameObject);});
 		}
+		Debug.Log("US:"+_overallControl.overallData.unlockScore);
 		_ready = true;
 	}
 	
@@ -47,6 +49,8 @@ public class UI_MapControl : MonoBehaviour {
 			}catch{
 				if(_overallControl.CLD.GetLevelByID(Int32.Parse(tr.name)).unlockScore > _overallControl.overallData.unlockScore)
 				tr.gameObject.SetActive(false);
+				else
+				tr.gameObject.SetActive(true);
 			}
 		}
 	}

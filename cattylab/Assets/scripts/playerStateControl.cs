@@ -137,7 +137,10 @@ public class playerStateControl : MonoBehaviour {
 		get{
 			return overallData.gameData.unlockScore;
 		}
-		private set{}
+		private set{
+			EventNotifier.Invoke("Area Complete!");
+			overallData.gameData.unlockScore = value;
+		}
 	}
 
 	public bool canSendGroup{
@@ -437,12 +440,12 @@ public class playerStateControl : MonoBehaviour {
 		}
 		//setting explored level
 		foreach(exploredLevels exLvl in overallData.gameData.exploredLevels){
-			if(exLvl.id == lvl.ent_id){
-				exLvl.rate += lvl.rate;
+			if(exLvl.id == lvl.ent_id){			
 				explored = true;
-				if(exLvl.rate >= 100){
+				if(exLvl.rate + lvl.rate >= 100 && exLvl.rate < 100){
 					unlockScore++;
 				}
+				exLvl.rate += lvl.rate;
 			}
 		}
 		if(!explored){
@@ -454,6 +457,7 @@ public class playerStateControl : MonoBehaviour {
 					unlockScore++;
 			}
 		}
+		
 		overallData.gameData.exploreGroups.RemoveAt(indexInList);
 		EventNotifier.Invoke("Explore Ended!");
 		OnLevelDataChanged.Invoke();
