@@ -65,7 +65,7 @@ public class exploredLevels{
 }
 
 public interface Ientity{
-    int id{
+    int ent_id{
         get;
         set;
     }
@@ -83,12 +83,20 @@ public class item:Ientity
 {
     public item(){}
     public item(int iid, int icount){
-        id = iid;
+        ent_id = iid;
         count = icount;
     }
-    public int id{
-        get;
-        set;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
     }
     public int count;
 }
@@ -99,14 +107,22 @@ public class cat:Ientity
     public cat(){}
 
     public cat(int iid, int a, int cc){
-        id = iid;
+        ent_id = iid;
         avaliable = a;
         count = cc;
     }
 
-    public int id{
-        get;
-        set;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
     }
     public int avaliable;
     public int count;
@@ -122,9 +138,17 @@ public class cat:Ientity
 public class catData:Ientity, ILootable
 {
 
-    public int id{
-        get;
-        set;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
     }
     public string name;
     public int level;
@@ -141,11 +165,20 @@ public class catData:Ientity, ILootable
 [System.Serializable]
 public class itemData:Ientity, ILootable
 {
-    public int id{
-        get;
-        set;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
     }
     public string name;
+    public int level;
     public int rarity{
         get;
         set;
@@ -165,9 +198,20 @@ public class exploreGroups
 }
 
 [System.Serializable]
-public class levels
+public class levels:Ientity
 {
-    public int id;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
+    }
     public string name;
     public int distance;
     public int rate;
@@ -199,9 +243,20 @@ public class gameSettings
 
 
 [Serializable]
-public class recipeData
+public class recipeData:Ientity
 {
-    public int id;
+    public int id = -1;
+    public int ent_id{
+        get{
+            if(id == -1){
+                throw new Exception();
+            }
+            return id;
+        }
+        set{
+            id = value;
+        }
+    }
 	public int time;
 	public List<int> cats;
 	public List<int> items;

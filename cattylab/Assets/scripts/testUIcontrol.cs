@@ -167,7 +167,7 @@ public class testUIcontrol : MonoBehaviour {
 			if(i != 0){
 				outputText += "\n";
 			}
-			outputText += string.Format("{0}: {1}  all:{2} avaliable:{3}",cats[i].id, CLD.GetCatName(cats[i].id), cats[i].count, cats[i].avaliable);
+			outputText += string.Format("{0}: {1}  all:{2} avaliable:{3}",cats[i].ent_id, CLD.GetCatName(cats[i].ent_id), cats[i].count, cats[i].avaliable);
 		}
 		ownedCatText.text = outputText;
 	}
@@ -177,7 +177,7 @@ public class testUIcontrol : MonoBehaviour {
 		item[] items = overallStats.OwnedItems.ToArray();
 		for(int i=0;i<items.Length;i++){
 			if(i>0) outputText +="\n";
-			outputText += string.Format("{0}  Owned:{1}", CLD.GetItemName(items[i].id), items[i].count);
+			outputText += string.Format("{0}  Owned:{1}", CLD.GetItemName(items[i].ent_id), items[i].count);
 		}
 		ownedItemText.text = outputText;
 	}
@@ -207,7 +207,7 @@ public class testUIcontrol : MonoBehaviour {
 				Dropdown.OptionData l_option = new Dropdown.OptionData();
 				l_option.text = levels.name;
 				levelOptions.Add(l_option);
-				levelOptionData.Add(levels.id);
+				levelOptionData.Add(levels.ent_id);
 			}
 		}
 		foreach(Dropdown.OptionData message in levelOptions){
@@ -224,21 +224,21 @@ public class testUIcontrol : MonoBehaviour {
 		recipeDropdown.ClearOptions();
 		recipeOptions.Add(new Dropdown.OptionData("Select"));
 		foreach(cat c in overallStats.Ownedcats){
-			int remains = c.avaliable - MatchingEntityInList(catOccupied, c.id);
+			int remains = c.avaliable - MatchingEntityInList(catOccupied, c.ent_id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
-				r_option.text = CLD.GetCatName(c.id) + "  (" + remains + ") ";
+				r_option.text = CLD.GetCatName(c.ent_id) + "  (" + remains + ") ";
 				recipeOptions.Add(r_option);
-				recipeOptionData.Add(CLD.GetCatData(c.id));
+				recipeOptionData.Add(CLD.GetCatData(c.ent_id));
 			}
 		}
 		foreach(item i in overallStats.OwnedItems){
-			int remains = i.count - MatchingEntityInList(itemOccupied, i.id);
+			int remains = i.count - MatchingEntityInList(itemOccupied, i.ent_id);
 			if(remains > 0){
 				Dropdown.OptionData r_option = new Dropdown.OptionData();
-				r_option.text = CLD.GetItemName(i.id) + "  (" + (i.count - MatchingEntityInList(itemOccupied, i.id)) + ") ";
+				r_option.text = CLD.GetItemName(i.ent_id) + "  (" + (i.count - MatchingEntityInList(itemOccupied, i.ent_id)) + ") ";
 				recipeOptions.Add(r_option);
-				recipeOptionData.Add(CLD.GetItemData(i.id));
+				recipeOptionData.Add(CLD.GetItemData(i.ent_id));
 			}
 		}	
 		foreach(Dropdown.OptionData message in recipeOptions){
@@ -254,12 +254,12 @@ public class testUIcontrol : MonoBehaviour {
 		crewDropdown.ClearOptions();
 		crewOptions.Add(new Dropdown.OptionData("Select"));
 		foreach(cat c in overallStats.Ownedcats){
-			int remains = c.avaliable - MatchingEntityInList(crewReady, c.id);
+			int remains = c.avaliable - MatchingEntityInList(crewReady, c.ent_id);
 			if(remains > 0){
 				Dropdown.OptionData c_option = new Dropdown.OptionData();
-				c_option.text = CLD.GetCatName(c.id) + "  (" + remains + ") ";
+				c_option.text = CLD.GetCatName(c.ent_id) + "  (" + remains + ") ";
 				crewOptions.Add(c_option);
-				crewOptionData.Add(c.id);
+				crewOptionData.Add(c.ent_id);
 			}
 		}
 		foreach(Dropdown.OptionData message in crewOptions){
@@ -281,10 +281,10 @@ public class testUIcontrol : MonoBehaviour {
 		if(valueInOptions == 0) return;
 		if(recipeOptionData[valueInOptions-1].GetType() == typeof(catData)){
 			Debug.Log("Cat");
-			catOccupied.Add(recipeOptionData[valueInOptions-1].id);
+			catOccupied.Add(recipeOptionData[valueInOptions-1].ent_id);
 		}else{
 			Debug.Log("Item");
-			itemOccupied.Add(recipeOptionData[valueInOptions-1].id);
+			itemOccupied.Add(recipeOptionData[valueInOptions-1].ent_id);
 		}
 		GetRecipeDropdownList();// reset the dropdown list
 	}
@@ -314,7 +314,7 @@ public class testUIcontrol : MonoBehaviour {
 		recipeData s_recipe = CLD.FindRecipeResultData(catOccupied.ToArray(), itemOccupied.ToArray());
 		ResetOccupyList();
 		ResetReadyList();
-		overallStats.SendMessage("SubmitRecipe", s_recipe.id);
+		overallStats.SendMessage("SubmitRecipe", s_recipe.ent_id);
 	}
 
 	private int MatchingEntityInList(List<int> a, int id){

@@ -116,11 +116,20 @@ public class playerStateControl : MonoBehaviour {
 		get{
 			return overallData.gameData.maxGroupCount;
 		}
+		set{
+			overallData.gameData.maxGroupCount = value;
+			Debug.Log(overallData.gameData.maxGroupCount);
+			OnGroupDataChanged.Invoke();
+		}
 	}
 
 	public int maxGroupPplCount{
 		get{
 			return overallData.gameData.maxGroupPplCount;
+		}
+		set{
+			overallData.gameData.maxGroupPplCount = value;
+			OnGroupDataChanged.Invoke();
 		}
 	}
 
@@ -153,6 +162,15 @@ public class playerStateControl : MonoBehaviour {
 
 	public exploreGroups GetGroupData(int index){
 		return overallData.gameData.exploreGroups[index];
+	}
+
+	public exploredLevels GetExploredLevelData(int levelID){
+		foreach(exploredLevels eL in overallData.gameData.exploredLevels){
+			if(eL.id == levelID){
+				return eL;
+			}
+		}
+		return null;
 	}
 
 	public bool SendGroup(int[] crew,int levelID){
@@ -188,7 +206,7 @@ public class playerStateControl : MonoBehaviour {
 		int current = 0;
 		bool success = false, found = false;
 		foreach(cat cat in overallData.gameData.ownedCats){
-			if(cat.id == id){
+			if(cat.ent_id == id){
 				found = true;
 				if(type == CatControlType.count){
 					int tmp = cat.count;
@@ -236,7 +254,7 @@ public class playerStateControl : MonoBehaviour {
 				Debug.Log("Cat not found, adding cat");
 
 				for(int i = 0;i<overallData.gameData.ownedCats.Count;i++){
-					if(overallData.gameData.ownedCats[i].id > id){
+					if(overallData.gameData.ownedCats[i].ent_id > id){
 						Debug.Log("Inserting cat to " + i);
 						overallData.gameData.ownedCats.Insert(i,new cat(id, amount, amount));
 						success = true;
@@ -262,7 +280,7 @@ public class playerStateControl : MonoBehaviour {
 		bool success = false, found = false;
 		int current = 0;
 		foreach(item nowItem in overallData.gameData.ownedItems){
-			if(nowItem.id == id){
+			if(nowItem.ent_id == id){
 				found = true;
 				if(nowItem.count + amount < 0){
 					Debug.LogError("Must Be exact 0 to remove this item type!");
@@ -283,7 +301,7 @@ public class playerStateControl : MonoBehaviour {
 		if(!found && amount > 0){
 				Debug.Log("Item not found, adding item");
 				for(int i = 0;i<overallData.gameData.ownedItems.Count;i++){
-					if(overallData.gameData.ownedItems[i].id > id){
+					if(overallData.gameData.ownedItems[i].ent_id > id){
 						overallData.gameData.ownedItems.Insert(i, new item(id, amount));
 						success = true;
 						break;
@@ -300,7 +318,11 @@ public class playerStateControl : MonoBehaviour {
 	}
 
 
-	public void changeMoney(int amount){
+	public bool changeMoney(int amount){
+		if(overallData.gameData.money + amount < 0){
+			EventNotifier.Invoke("Insufficient Fund...");
+			return false;
+		}
 		overallData.gameData.money += amount;
 		OnMoneyChanged.Invoke();
 		string message;
@@ -310,6 +332,7 @@ public class playerStateControl : MonoBehaviour {
 			message = "$" + (amount*-1) + " of money deducted...";
 		}
 		EventNotifier.Invoke(message);
+		return true;
 	}
 
 	public void SubmitRecipe(int recipe_id){
@@ -320,7 +343,7 @@ public class playerStateControl : MonoBehaviour {
 		Debug.Log("Recipe Received");
 		recipeData rD = CLD.GetRecipeByID(recipe_id);
 		int catToRemove = 0, itemToRemove = 0;
-		changeMoney(rD.cost * -1);
+		if(!changeMoney(rD.cost * -1)) return;
 		for(int i = 0; i<rD.cats.Count;i++){
 			if(i==0 || rD.cats[i-1] == rD.cats[i]){
 				catToRemove++;
@@ -359,12 +382,12 @@ public class playerStateControl : MonoBehaviour {
 		overallData.gameData.isCrafting = false;
 		Ientity entity = CLD.GetEntityByRecipeID(overallData.gameData.craftID);
 		if(entity.GetType() == typeof(catData)){
-			Debug.Log("Added Cat:" + ((catData)entity).name + "  ID:" + ((catData)entity).id);
-			CatControl(((catData)entity).id,1,CatControlType.count);
+			Debug.Log("Added Cat:" + ((catData)entity).name + "  ID:" + ((catData)entity).ent_id);
+			CatControl(((catData)entity).ent_id,1,CatControlType.count);
 			EventNotifier.Invoke("Crafted New Cat: " + ((catData)entity).name);
 			OnCatDataChaged.Invoke();
 		}else{
-			ItemControl(((itemData)entity).id, 1);
+			ItemControl(((itemData)entity).ent_id, 1);
 			EventNotifier.Invoke("Crafted New Item: " + ((itemData)entity).name);
 			OnItemDataChanged.Invoke();
 		}
@@ -397,7 +420,7 @@ public class playerStateControl : MonoBehaviour {
 			count = 1;
 			for(int j = i + 1 ; j < loots.Count; j++){
 				Debug.Log("aye" + loots[j].GetType());
-				if(loots[i].GetType() == loots[j].GetType() && loots[i].id == loots[j].id){
+				if(loots[i].GetType() == loots[j].GetType() && loots[i].ent_id == loots[j].ent_id){
 					Debug.Log("DIE");
 					count++;
 					loots.RemoveAt(j);
@@ -405,16 +428,16 @@ public class playerStateControl : MonoBehaviour {
 				}
 			}
 			if(loots[i].GetType()==typeof(catData)){
-					CatControl(loots[i].id, count, CatControlType.count);
-					lootText += CLD.GetCatName(loots[i].id) + ", ";
+					CatControl(loots[i].ent_id, count, CatControlType.count);
+					lootText += CLD.GetCatName(loots[i].ent_id) + ", ";
 			}else{
-					ItemControl(loots[i].id, count);
-					lootText += CLD.GetItemName(loots[i].id) + ", ";
+					ItemControl(loots[i].ent_id, count);
+					lootText += CLD.GetItemName(loots[i].ent_id) + ", ";
 			}
 		}
 		//setting explored level
 		foreach(exploredLevels exLvl in overallData.gameData.exploredLevels){
-			if(exLvl.id == lvl.id){
+			if(exLvl.id == lvl.ent_id){
 				exLvl.rate += lvl.rate;
 				explored = true;
 				if(exLvl.rate >= 100){
@@ -424,7 +447,7 @@ public class playerStateControl : MonoBehaviour {
 		}
 		if(!explored){
 			exploredLevels exLvl = new exploredLevels();
-			exLvl.id = lvl.id;
+			exLvl.id = lvl.ent_id;
 			exLvl.rate = lvl.rate;
 			overallData.gameData.exploredLevels.Add(exLvl);
 			if(exLvl.rate >= 100){

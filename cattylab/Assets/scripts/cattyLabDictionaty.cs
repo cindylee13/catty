@@ -27,8 +27,40 @@ public class cattyLabDictionaty : MonoBehaviour{
 			recipeCollection = JsonUtility.FromJson<recipeCollection>(rawRecipes);
 			levelCollection = JsonUtility.FromJson<levelCollection>(rawLevels);
 			gameSettings = JsonUtility.FromJson<CLGameSettings>(rawSettings);
+			//reset
+			SortEntity<catData>(ref entityCollection.cats);
+			SortEntity<itemData>(ref entityCollection.items);
+			SortEntity<recipeData>(ref recipeCollection.recipes);
+			SortEntity<levels>(ref levelCollection.levels);
 			_ready = true;
 		}
+	}
+
+	
+	private void SortEntity<T>(ref T[] arr) where T : Ientity, new()
+	{
+		List<T> tmp = new List<T>();
+		Debug.Log(typeof(T).ToString() + arr.Length);
+		for(int i = 0;i<arr.Length;i++){
+			//Debug.Log(arr[i].ent_id);
+			if(i==0 || arr[i].ent_id > tmp[tmp.Count-1].ent_id){
+				tmp.Add(arr[i]);
+			}else{
+				int cc;
+				for(cc = tmp.Count;cc>=0&&tmp[cc-1].ent_id>arr[i].ent_id;cc--);
+				tmp.Insert(cc, arr[i]);
+			}
+		}
+		int count = 0;
+		while(count < tmp.Count){
+			if(tmp[count].ent_id > count){
+				//Debug.Log("aye");
+				tmp.Insert(count, new T());
+			}
+			count++;
+		}
+		arr = tmp.ToArray();
+		
 	}
 
 	public bool IsReady{
@@ -54,7 +86,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public catData GetCatData(int id){
 		catData tmp = new catData();
 		try{
-			tmp.id = id;
+			tmp.id = entityCollection.cats[id].ent_id;
 			tmp.name = entityCollection.cats[id].name;
 			tmp.level = entityCollection.cats[id].level;
 			tmp.price = entityCollection.cats[id].price;
@@ -72,20 +104,24 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public List<catData> GetAllCats(){
 		List<catData> output = new List<catData>();
 		for(int i = 0 ; i < entityCollection.cats.Length ; i++){
-			catData tmp = new catData();
-			tmp.id = i;
-			tmp.name = entityCollection.cats[i].name;
-			tmp.level = entityCollection.cats[i].level;
-			tmp.price = entityCollection.cats[i].price;
-			tmp.description = entityCollection.cats[i].description;
-			output.Add(tmp);
+			try{
+				catData tmp = new catData();
+				tmp.id = entityCollection.cats[i].ent_id;
+				tmp.name = entityCollection.cats[i].name;
+				tmp.level = entityCollection.cats[i].level;
+				tmp.price = entityCollection.cats[i].price;
+				tmp.description = entityCollection.cats[i].description;
+				output.Add(tmp);
+			}catch{
+
+			}
 		}
 		return output;
 	}
 
 	public string GetItemName(int id){
 		try{
-			return entityCollection.items[id].name;
+			return entityCollection.items[entityCollection.items[id].ent_id].name;
 		}catch{
 			return "NOTHING!!!!";
 		}
@@ -94,13 +130,17 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public List<itemData> GetAllItems(){
 		List<itemData> output = new List<itemData>();
 		for(int i = 0 ; i < entityCollection.items.Length ; i++){
-			itemData tmp = new itemData();
-			tmp.id = i;
-			tmp.name = entityCollection.items[i].name;
-			tmp.rarity = entityCollection.items[i].rarity;
-			tmp.price = entityCollection.items[i].price;
-			tmp.description = entityCollection.items[i].description;
-			output.Add(tmp);
+			try{
+				itemData tmp = new itemData();
+				tmp.id = entityCollection.items[i].ent_id;
+				tmp.name = entityCollection.items[i].name;
+				tmp.rarity = entityCollection.items[i].rarity;
+				tmp.price = entityCollection.items[i].price;
+				tmp.description = entityCollection.items[i].description;
+				output.Add(tmp);
+			}catch{
+
+			}
 		}
 		return output;
 	}
@@ -108,7 +148,7 @@ public class cattyLabDictionaty : MonoBehaviour{
 	public itemData GetItemData(int id){
 		itemData tmp = new itemData();
 		try{
-			tmp.id = id;
+			tmp.id = entityCollection.items[id].ent_id;
 			tmp.name = entityCollection.items[id].name;
 			tmp.rarity = entityCollection.items[id].rarity;
 			tmp.price = entityCollection.items[id].price;
@@ -136,8 +176,12 @@ public class cattyLabDictionaty : MonoBehaviour{
 		Array.Sort(cats);
 		Array.Sort(items);
 		foreach(recipeData rD in recipeCollection.recipes){
-			if(cats.SequenceEqual(rD.cats) && items.SequenceEqual(rD.items)){
-				return rD;
+			try{
+				if(cats.SequenceEqual(rD.cats) && items.SequenceEqual(rD.items)){
+					return rD;
+				}
+			}catch{
+
 			}
 		}
 		return null;

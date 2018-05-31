@@ -26,23 +26,41 @@ public class UI_EncControl : MonoBehaviour {
 		List<catData> allCats = new List<catData>(_overallControl.CLD.GetAllCats());
 		List<itemData> allItems = new List<itemData>(_overallControl.CLD.GetAllItems());
 		foreach(catData cD in allCats){
-			//Debug.Log(cD.id);
-			ListItemData lid = new ListItemData();
-			lid.EntityID = cD.id;
-			lid.EntityType = "cat";
-			lid.EntityName = _overallControl.CLD.GetCatName(cD.id);
-			lid.MiscData = cD.description;
-			_LIDList.Add(lid);
+			try{
+				//Debug.Log(cD.ent_id);
+				ListItemData lid = new ListItemData();
+				lid.EntityID = cD.ent_id;
+				lid.EntityType = "cat";
+				lid.EntityName = _overallControl.CLD.GetCatName(cD.ent_id) + GetRarityStars(cD.rarity);
+				lid.MiscData = cD.description;
+				_LIDList.Add(lid);
+			}catch{
+
+			}
 		}
 		foreach(itemData iD in allItems){
-			ListItemData lid = new ListItemData();
-			lid.EntityID = iD.id;
-			lid.EntityType = "item";
-			lid.EntityName = _overallControl.CLD.GetItemName(iD.id);
-			lid.MiscData = iD.description;
-			_LIDList.Add(lid);
+			try{
+				ListItemData lid = new ListItemData();
+				lid.EntityID = iD.ent_id;
+				lid.EntityType = "item";
+				lid.EntityName = _overallControl.CLD.GetItemName(iD.ent_id)+ GetRarityStars(iD.rarity);
+				lid.MiscData = "合成物品";
+				_LIDList.Add(lid);
+			}catch{
+				
+			}
 		}
 		_list.listItemData = _LIDList;
 	}
+
+	private string GetRarityStars(int rarity){
+		string output = "<color=#e5c110>";
+		for(int i = 0;i<rarity;i++){
+			output += "★";
+		}
+		output+="</color>";
+		return output;
+	}
+
 
 }

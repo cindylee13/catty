@@ -40,6 +40,15 @@ public class UI_MapControl : MonoBehaviour {
 		if(!_ready) return;
 		setText();//FUCC U
 		_goBtn.interactable = CanSendGroup;
+		foreach(Transform tr in _mapObject.transform){
+			try{
+				tr.GetChild(0).GetComponent<Text>().text = _overallControl.overallData.GetExploredLevelData(Int32.Parse(tr.name)).rate + "%";
+				tr.gameObject.SetActive(true);
+			}catch{
+				if(_overallControl.CLD.GetLevelByID(Int32.Parse(tr.name)).unlockScore > _overallControl.overallData.unlockScore)
+				tr.gameObject.SetActive(false);
+			}
+		}
 	}
 	//-------------------------
 	//----INTERFACE CONTROL----
@@ -109,11 +118,11 @@ public class UI_MapControl : MonoBehaviour {
 		List<cat> cats = _overallControl.GetCats();
 		foreach(cat c in cats){
 			ListItemData lid = new ListItemData();
-			lid.EntityID = c.id;
+			lid.EntityID = c.ent_id;
 			lid.EntityType = "cat";
-			lid.EntityName = _overallControl.CLD.GetCatName(c.id);
-			lid.MiscData = "X" + (c.count - MatchingEntityInList(_catOccupied, c.id)) + "  " + GetRarityStars(_overallControl.CLD.GetCatData(c.id).rarity);
-			lid.Interable = (c.count - MatchingEntityInList(_catOccupied, c.id)) > 0 && CanAddCats;
+			lid.EntityName = _overallControl.CLD.GetCatName(c.ent_id);
+			lid.MiscData = "X" + (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id)) + "  " + GetRarityStars(_overallControl.CLD.GetCatData(c.ent_id).rarity);
+			lid.Interable = (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id)) > 0 && CanAddCats;
 			_catLIDList.Add(lid);
 		}
 		_groupList.listItemData = _catLIDList;
@@ -185,11 +194,11 @@ public class UI_MapControl : MonoBehaviour {
     }
 
 	private string GetRarityStars(int rarity){
-		string output = "";
+		string output = "<color=#e5c110>";
 		for(int i = 0;i<rarity;i++){
-			output += "☆";
+			output += "★";
 		}
-		
+		output+="</color>";
 		return output;
 	}
 

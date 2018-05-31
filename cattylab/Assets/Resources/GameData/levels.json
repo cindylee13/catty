@@ -2,40 +2,178 @@
     "levels":[
         {
             "id":0,
-            "name":"forest",
+            "name":"森林",
             "distance":3,
             "rate":20,
             "unlockScore":0,
             "loots":[
+                {"type":"cat", "id":0, "pos":70},
                 {"type":"item", "id":1, "pos":70},
                 {"type":"cat", "id":1, "pos":40},
                 {"type":"item", "id":2, "pos":50},
-                {"type":"cat", "id":2, "pos":20}
+                {"type":"cat", "id":2, "pos":20},
+                {"type":"item", "id":3, "pos":20},
+                {"type":"item", "id":4, "pos":15},
+                {"type":"cat", "id":3, "pos":10}
+                
             ],
             "cost":100
         },
         {
             "id":1,
-            "name":"forest 2",
+            "name":"遙遠的熱帶雨林",
             "distance":40,
             "rate":20,
             "unlockScore":0,
             "loots":[
-                {"type":"item", "id":3, "pos":20}
+                {"type":"cat", "id":0, "pos":60},
+              {"type":"item", "id":3, "pos":30},
+              {"type":"item", "id":4, "pos":25},
+              {"type":"item", "id":5, "pos":70},
+              {"type":"item", "id":6, "pos":50},
+              {"type":"cat", "id":3, "pos":30},
+              {"type":"cat", "id":4, "pos":25},
+              {"type":"cat", "id":5, "pos":20}
             ],
             "cost":120
         },
         {
-            "id":1,
-            "name":"cave",
+            "id":2,
+            "name":"洞穴",
             "distance":60,
-            "rate":20,
+            "rate":30,
+            "unlockScore":1,
+            "loots":[
+                {"type":"cat", "id":0, "pos":10},
+                {"type":"item", "id":3, "pos":30},
+                {"type":"item", "id":4, "pos":30},
+                {"type":"item", "id":5, "pos":30},
+                {"type":"item", "id":6, "pos":30},
+                {"type":"item", "id":7, "pos":50},
+                {"type":"item", "id":8, "pos":15},
+                {"type":"item", "id":9, "pos":70},
+                {"type":"cat", "id":3, "pos":50},
+                {"type":"cat", "id":4, "pos":30},
+                {"type":"cat", "id":5, "pos":30},
+                {"type":"cat", "id":6, "pos":20},
+                {"type":"cat", "id":7, "pos":20},
+                {"type":"cat", "id":8, "pos":15}
+
+            ],
+            "cost":250
+        },
+        {
+            "id":3,
+            "name":"多布谷",
+            "distance":60,
+            "rate":30,
             "unlockScore":1,
             "loots":[
                 {"type":"item", "id":3, "pos":30},
-                {"type":"cat", "id":4, "pos":30}
+                {"type":"item", "id":4, "pos":30},
+                {"type":"item", "id":5, "pos":30},
+                {"type":"item", "id":6, "pos":30},
+                {"type":"item", "id":7, "pos":30},
+                {"type":"item", "id":8, "pos":10},
+                {"type":"item", "id":9, "pos":10},
+                {"type":"item", "id":10, "pos":20},
+                {"type":"item", "id":11, "pos":15},
+                {"type":"item", "id":12, "pos":40},
+                {"type":"cat", "id":4, "pos":30},
+                {"type":"cat", "id":5, "pos":30},
+                {"type":"cat", "id":6, "pos":30},
+                {"type":"cat", "id":9, "pos":40},
+                {"type":"cat", "id":11, "pos":20}
             ],
             "cost":300
+        },
+        {
+            "id":4,
+            "name":"鳥屋",
+            "distance":80,
+            "rate":40,
+            "unlockScore":3,
+            "loots":[
+                {"type":"item", "id":1, "pos":30},
+                {"type":"item", "id":2, "pos":30},
+                {"type":"item", "id":3, "pos":30},
+                {"type":"item", "id":4, "pos":30},
+                {"type":"item", "id":5, "pos":30},
+                {"type":"item", "id":6, "pos":30},
+                {"type":"item", "id":7, "pos":30},
+                {"type":"item", "id":8, "pos":30},
+                {"type":"item", "id":9, "pos":30},
+                {"type":"item", "id":10, "pos":20},
+                {"type":"item", "id":11, "pos":20},
+                {"type":"item", "id":12, "pos":20},
+                {"type":"item", "id":13, "pos":30},
+                {"type":"item", "id":14, "pos":35},
+                {"type":"item", "id":15, "pos":30},
+                {"type":"cat", "id":13, "pos":30},
+                {"type":"cat", "id":2, "pos":70},
+                {"type":"cat", "id":1, "pos":50}
+            ],
+            "cost":330
+        },
+        {
+            "id":5,
+            "name":"貓雲",
+            "distance":85,
+            "rate":45,
+            "unlockScore":3,
+            "loots":[
+                {"type":"item", "id":1, "pos":30},
+                {"type":"item", "id":2, "pos":20},
+                {"type":"item", "id":3, "pos":10},
+                {"type":"item", "id":16, "pos":30},
+                {"type":"item", "id":17, "pos":30},
+                {"type":"item", "id":18, "pos":10},
+                {"type":"item", "id":13, "pos":70},
+                {"type":"item", "id":14, "pos":35},
+                {"type":"item", "id":15, "pos":30},
+                {"type":"cat", "id":13, "pos":30},
+                {"type":"cat", "id":6, "pos":50}
+            ],
+            "cost":350
+        },
+        {
+            "id":6,
+            "name":"海洋",
+            "distance":85,
+            "rate":45,
+            "unlockScore":3,
+            "loots":[
+                {"type":"item", "id":1, "pos":30},
+                {"type":"item", "id":2, "pos":20},
+                {"type":"item", "id":3, "pos":10},
+                {"type":"item", "id":4, "pos":35},
+                {"type":"item", "id":5, "pos":30},
+                {"type":"item", "id":19, "pos":50},
+                {"type":"item", "id":20, "pos":50},
+                {"type":"item", "id":21, "pos":40},
+                {"type":"item", "id":29, "pos":30},
+                {"type":"cat", "id":16, "pos":40},
+                {"type":"cat", "id":8, "pos":80}
+            ],
+            "cost":400
+        },
+        {
+            "id":7,
+            "name":"地獄",
+            "distance":500,
+            "rate":100,
+            "unlockScore":5,
+            "loots":[
+                {"type":"item", "id":4, "pos":80},
+                {"type":"item", "id":20, "pos":50},
+                {"type":"item", "id":23, "pos":30},
+                {"type":"item", "id":21, "pos":40},
+                {"type":"item", "id":26, "pos":30},
+                {"type":"item", "id":30, "pos":20},
+                {"type":"cat", "id":4, "pos":30},
+                {"type":"cat", "id":26, "pos":10}
+            ],
+            "cost":500
         }
     ]
 }

@@ -21,6 +21,7 @@ public class UI_Control : MonoBehaviour {
 	public Animator messengerAnim;
 	public Text messengerText;
 	private bool _ready = false;
+	public GameObject _groupAvailable, _groupUnavailable, _groupPanel;
 	// Use this for initialization
 	IEnumerator Start () {
 		if(!CLD.IsReady){
@@ -35,6 +36,17 @@ public class UI_Control : MonoBehaviour {
 		ResetCraftingOccupy();
 		_ready = true;
 	}
+
+	void OnApplicationQuit(){
+		overallData.SaveGameData();
+	}
+
+	IEnumerator GameSavor(){
+		while(true){
+			yield return new WaitForSeconds(150);
+			overallData.SaveGameData();
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -46,7 +58,7 @@ public class UI_Control : MonoBehaviour {
 
 	void SendRecipe(){
 		recipeData s_recipe = CLD.FindRecipeResultData(_catOccupied.ToArray(), _itemOccupied.ToArray());
-		overallData.SendMessage("SubmitRecipe", s_recipe.id);
+		overallData.SendMessage("SubmitRecipe", s_recipe.ent_id);
 		ResetCraftingOccupy();
 		StartCoroutine(craftingCountDownClock());
 
@@ -59,6 +71,8 @@ public class UI_Control : MonoBehaviour {
 		}
 	}
 
+	
+
 	void RefreshCraftingList(){
 		//create Item data list
 		_CraftlidList.Clear();
@@ -66,16 +80,16 @@ public class UI_Control : MonoBehaviour {
 		if(overallData.Ownedcats == null) return;
 		foreach(cat c in overallData.Ownedcats){
 			ListItemData lid = new ListItemData();
-			lid.EntityID = c.id;
+			lid.EntityID = c.ent_id;
 			lid.EntityType = "cat";
-			lid.MiscData = "X" + (c.count - MatchingEntityInList(_catOccupied, c.id));
+			lid.MiscData = "X" + (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id));
 			_CraftlidList.Add(lid);
 		}
 		foreach(item i in overallData.OwnedItems){
 			ListItemData lid = new ListItemData();
-			lid.EntityID = i.id;
+			lid.EntityID = i.ent_id;
 			lid.EntityType = "item";
-			lid.MiscData = "X" + (i.count - MatchingEntityInList(_itemOccupied, i.id));
+			lid.MiscData = "X" + (i.count - MatchingEntityInList(_itemOccupied, i.ent_id));
 			_CraftlidList.Add(lid);
 		}
 		_CraftingList.listItemData = _CraftlidList;
@@ -203,8 +217,41 @@ public class UI_Control : MonoBehaviour {
 	public bool SendGroup(List<int> crew, int levelID){
 		return overallData.SendGroup(crew.ToArray(), levelID);
 	}
+
+	void ChangeUIGroup(){
+		foreach(Transform child in _groupPanel.transform){
+			Destroy(child.gameObject);
+		}
+		for(int i = 0;i<overallData.maxGroupCount;i++){
+			if(i<overallData.maxGroupCount-overallData.groupCount){
+				Instantiate(_groupAvailable,Vector3.zero,new Quaternion(),_groupPanel.transform);
+			}else{
+				Instantiate(_groupUnavailable,Vector3.zero,new Quaternion(),_groupPanel.transform);
+			}
+		}
+		ChangeGroupCount();
+	}
+
 	void ChangeGroupCount(){
-		
+		StartCoroutine(StartExploreClock());
+	}
+
+	IEnumerator StartExploreClock(){
+		double time = 0;
+		while(overallData.groupCount > 0){
+			for(int i = 0;i< overallData.groupCount;i++){
+				if(overallData.GetGroupData(i).ETC > time){
+					time = overallData.GetGroupData(i).ETC;
+				}
+			}
+			foreach(Text t in _exploreTimeText){
+				t.text = IntToTime((int)(time - ConvertToUnixTimestamp(System.DateTime.Now)));
+			}
+			yield return new WaitForSeconds(1f);
+		}
+		foreach(Text t in _exploreTimeText){
+				t.text = "";
+			}
 	}
 
 	public void EventMessage(string text){
