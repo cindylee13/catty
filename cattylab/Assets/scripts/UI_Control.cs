@@ -64,7 +64,7 @@ public class UI_Control : MonoBehaviour {
 
 	}
 
-	void ChangeMoneyText(){
+	public void ChangeMoneyText(){
 		long money = overallData.money;
 		foreach(Text tx in _moneyText){
 			tx.text = "$" + money;
@@ -114,7 +114,7 @@ public class UI_Control : MonoBehaviour {
 		CheckRecipe();
 	}
 
-	void ResetCraftingOccupy(){
+	public void ResetCraftingOccupy(){
 		_CraftlidList.Clear();
 		_catOccupied.Clear();
 		_itemOccupied.Clear();
@@ -218,7 +218,7 @@ public class UI_Control : MonoBehaviour {
 		return overallData.SendGroup(crew.ToArray(), levelID);
 	}
 
-	void ChangeUIGroup(){
+	public void ChangeUIGroup(){
 		foreach(Transform child in _groupPanel.transform){
 			Destroy(child.gameObject);
 		}

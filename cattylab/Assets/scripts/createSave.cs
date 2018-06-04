@@ -12,6 +12,7 @@ public class saveData
 
     public void saveFile()
     {
+        /*
         string destination = Application.persistentDataPath + "/playerSave";
         string filename = "/save.dat";
         FileStream file;
@@ -31,10 +32,22 @@ public class saveData
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, tmpData);
         file.Close();
+        */
+        string tmp;
+        if (gameData != null)
+        {
+            tmp = JsonUtility.ToJson(gameData);
+            PlayerPrefs.SetString("SAVE_DATA", tmp);
+        }
+        else
+        {
+            Debug.LogError("Load savedata first!");
+        }
     }
 
     public bool loadfile()
     {
+        /*
         Debug.Log("loading file");
         string destination = Application.persistentDataPath + "/playerSave/save.dat";
         FileStream file;
@@ -57,12 +70,24 @@ public class saveData
         set(data);
        
         return true;
+        */
+        string tmp = PlayerPrefs.GetString("SAVE_DATA","NOT_FOUND");
+        if(tmp == "NOTFOUND")
+            gameData = gameData.init;
+        else
+            gameData = JsonUtility.FromJson<gameData>(tmp);
+        return true;
+
     }
 
-    public void set(gameData data){
-        try{
+    public void set(gameData data)
+    {
+        try
+        {
             gameData = new gameData(data);
-        }catch{
+        }
+        catch
+        {
             gameData = gameData.init;
         }
     }

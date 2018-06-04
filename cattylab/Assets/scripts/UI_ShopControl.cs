@@ -23,7 +23,7 @@ public class UI_ShopControl : MonoBehaviour {
 	void Update () {
 		
 	}
-	void RefreshMerchList(){
+	public void RefreshMerchList(){
 		_merchLIDlist.Clear();
 		List<item> items = _overallControl.overallData.OwnedItems;
 		foreach(item it in items){

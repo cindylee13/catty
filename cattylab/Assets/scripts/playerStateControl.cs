@@ -32,6 +32,8 @@ public class playerStateControl : MonoBehaviour {
 			overallData.set(gameData.init);
 			overallData.saveFile();
 		}
+
+		Debug.Log(JsonUtility.ToJson(overallData.gameData,true));
 		//init events
 		if(EventNotifier == null) EventNotifier = new EventWithMessage();
 		if(OnMoneyChanged == null) OnMoneyChanged = new UnityEvent();

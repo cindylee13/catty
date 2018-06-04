@@ -3967,9 +3967,9 @@ MonoBehaviour:
   OnMoneyChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ChangeMoneyText
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3983,9 +3983,9 @@ MonoBehaviour:
   OnGameInitialize:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 21722591}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 21722596}
+        m_MethodName: refreshList
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3994,9 +3994,9 @@ MonoBehaviour:
           m_StringArgument: refreshList
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ChangeUIGroup
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4010,9 +4010,9 @@ MonoBehaviour:
   OnCatDataChaged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ResetCraftingOccupy
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4021,9 +4021,9 @@ MonoBehaviour:
           m_StringArgument: ResetCraftingOccupy
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 21722591}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 21722596}
+        m_MethodName: refreshList
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4037,9 +4037,9 @@ MonoBehaviour:
   OnItemDataChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ResetCraftingOccupy
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4048,9 +4048,9 @@ MonoBehaviour:
           m_StringArgument: ResetCraftingOccupy
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 21722591}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 21722596}
+        m_MethodName: refreshList
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4059,9 +4059,9 @@ MonoBehaviour:
           m_StringArgument: refreshList
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 461234167}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 461234172}
+        m_MethodName: RefreshMerchList
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4085,9 +4085,9 @@ MonoBehaviour:
   OnGroupDataChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ChangeUIGroup
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4101,9 +4101,9 @@ MonoBehaviour:
   OnExploreStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ResetCraftingOccupy
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4112,9 +4112,9 @@ MonoBehaviour:
           m_StringArgument: ResetCraftingOccupy
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ChangeUIGroup
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4128,9 +4128,9 @@ MonoBehaviour:
   OnExploreEnded:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423831868}
-        m_MethodName: SendMessage
-        m_Mode: 5
+      - m_Target: {fileID: 423831872}
+        m_MethodName: ChangeUIGroup
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
