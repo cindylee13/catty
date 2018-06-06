@@ -71,11 +71,16 @@ public class saveData
        
         return true;
         */
-        string tmp = PlayerPrefs.GetString("SAVE_DATA","NOT_FOUND");
-        if(tmp == "NOTFOUND")
+        string tmp = PlayerPrefs.GetString("SAVEDATAS", "NOT_FOUND");
+        if (tmp == "NOT_FOUND")
+        {
             gameData = gameData.init;
+        }
         else
+        {
+            Debug.Log(tmp);
             gameData = JsonUtility.FromJson<gameData>(tmp);
+        }
         return true;
 
     }

@@ -50,6 +50,11 @@ public class UI_Control : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(Input.GetKeyDown(KeyCode.O)){
+			Debug.Log("Delete All Save");
+			PlayerPrefs.DeleteAll();
+			Application.Quit();
+		}
 		if(!_ready) return;
 		if(!_isMessengerActive && _pendingMessage.Count > 0){
 			StartCoroutine(ShowPendingMessage());
