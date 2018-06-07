@@ -166,6 +166,7 @@ public class UI_Control : MonoBehaviour {
 	}
 
 	private void CheckRecipe(){
+		if(_catOccupied.Count > 0 || _itemOccupied.Count > 0)
 		_StartCraftingBtn.interactable = CLD.FindRecipeResultData(_catOccupied, _itemOccupied) != null;
 	}
 
@@ -195,7 +196,7 @@ public class UI_Control : MonoBehaviour {
 	}
 
 	string IntToTime(int seconds){
-		string output = "";
+		string output = string.Empty;
 		if(saveDivide(seconds,3600) > 0)
 			output += saveDivide(seconds, 3600).ToString().PadLeft(2,'0') + ":";
 		if(saveDivide(seconds,60) > 0){
@@ -255,7 +256,7 @@ public class UI_Control : MonoBehaviour {
 			yield return new WaitForSeconds(1f);
 		}
 		foreach(Text t in _exploreTimeText){
-				t.text = "";
+				t.text = string.Empty;
 			}
 	}
 

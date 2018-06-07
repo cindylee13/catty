@@ -33,7 +33,7 @@ public class playerStateControl : MonoBehaviour {
 			overallData.saveFile();
 		}
 
-		Debug.Log(JsonUtility.ToJson(overallData.gameData,true));
+		//Debug.Log(JsonUtility.ToJson(overallData.gameData,true));
 		//init events
 		if(EventNotifier == null) EventNotifier = new EventWithMessage();
 		if(OnMoneyChanged == null) OnMoneyChanged = new UnityEvent();
@@ -189,6 +189,7 @@ public class playerStateControl : MonoBehaviour {
 			return false;
 		}
 		int count = 0;
+		
 		for(int i = 0; i < eG.crews.Length;i++){
 			if(i==0 || eG.crews[i] == eG.crews[i - 1]){
 				count++;
@@ -202,7 +203,7 @@ public class playerStateControl : MonoBehaviour {
 		}
 		overallData.gameData.exploreGroups.Add(eG);
 		StartCoroutine(StartExploreClock(eG));
-		Debug.Log("Explore Started");
+		//Debug.Log("Explore Started");
 		EventNotifier.Invoke("Explore Started");
 		return true;
 	}
@@ -276,6 +277,7 @@ public class playerStateControl : MonoBehaviour {
 		}
 			if(success) OnCatDataChaged.Invoke();
 			else Debug.LogError("U DON FKED UP ID:" + id + " AMOUNT:" + amount + " TYPE:" + type);
+			System.GC.Collect();
 			return success;
 	}
 

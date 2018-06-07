@@ -37,7 +37,7 @@ public class saveData
         if (gameData != null)
         {
             tmp = JsonUtility.ToJson(gameData);
-            PlayerPrefs.SetString("SAVE_DATA", tmp);
+            PlayerPrefs.SetString("SAVEDATAS", tmp);
         }
         else
         {
