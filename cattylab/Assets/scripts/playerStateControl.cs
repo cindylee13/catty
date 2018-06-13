@@ -140,7 +140,7 @@ public class playerStateControl : MonoBehaviour {
 			return overallData.gameData.unlockScore;
 		}
 		private set{
-			EventNotifier.Invoke("Area Complete!");
+			EventNotifier.Invoke("找到了新的區域!");
 			overallData.gameData.unlockScore = value;
 		}
 	}
@@ -204,7 +204,7 @@ public class playerStateControl : MonoBehaviour {
 		overallData.gameData.exploreGroups.Add(eG);
 		StartCoroutine(StartExploreClock(eG));
 		//Debug.Log("Explore Started");
-		EventNotifier.Invoke("Explore Started");
+		EventNotifier.Invoke("貓貓們出發了!");
 		return true;
 	}
 
@@ -327,16 +327,16 @@ public class playerStateControl : MonoBehaviour {
 
 	public bool changeMoney(int amount){
 		if(overallData.gameData.money + amount < 0){
-			EventNotifier.Invoke("Insufficient Fund...");
+			EventNotifier.Invoke("罐罐不夠了...");
 			return false;
 		}
 		overallData.gameData.money += amount;
 		OnMoneyChanged.Invoke();
 		string message;
 		if(amount>=0){
-			message = "$" + amount  + " of money gained!";
+			message = "得到了" + amount  + "個罐罐!";
 		}else{
-			message = "$" + (amount*-1) + " of money deducted...";
+			message = "花掉了" + (amount*-1) + " 個罐罐...";
 		}
 		EventNotifier.Invoke(message);
 		return true;
@@ -379,7 +379,7 @@ public class playerStateControl : MonoBehaviour {
 		overallData.gameData.isCrafting = true;
 		overallData.gameData.craftID = recipe_id;
 		overallData.gameData.craftETC = ConvertToUnixTimestamp(System.DateTime.Now) + CLD.GetRecipeTime(recipe_id);
-		EventNotifier.Invoke("Crafting Start!");
+		EventNotifier.Invoke("開始合成!");
 		StartCoroutine(StartCraftingClock());
 		OnCatDataChaged.Invoke();
 		OnItemDataChanged.Invoke();
@@ -391,11 +391,11 @@ public class playerStateControl : MonoBehaviour {
 		if(entity.GetType() == typeof(catData)){
 			Debug.Log("Added Cat:" + ((catData)entity).name + "  ID:" + ((catData)entity).ent_id);
 			CatControl(((catData)entity).ent_id,1,CatControlType.count);
-			EventNotifier.Invoke("Crafted New Cat: " + ((catData)entity).name);
+			EventNotifier.Invoke("合成了: " + ((catData)entity).name);
 			OnCatDataChaged.Invoke();
 		}else{
 			ItemControl(((itemData)entity).ent_id, 1);
-			EventNotifier.Invoke("Crafted New Item: " + ((itemData)entity).name);
+			EventNotifier.Invoke("合成了: " + ((itemData)entity).name);
 			OnItemDataChanged.Invoke();
 		}
 		OnCraftingEnded.Invoke();
@@ -463,11 +463,15 @@ public class playerStateControl : MonoBehaviour {
 		}
 		
 		overallData.gameData.exploreGroups.RemoveAt(indexInList);
-		EventNotifier.Invoke("Explore Ended!");
+		EventNotifier.Invoke("探索完成!");
 		OnLevelDataChanged.Invoke();
 		OnGroupDataChanged.Invoke();
 		OnExploreEnded.Invoke();
-		EventNotifier.Invoke("Got Loot: " + lootText);
+		changeMoney(CLD.GetLevelByID(eG.destination).cost);
+		if(lootText != string.Empty)
+		EventNotifier.Invoke("貓貓們找到了: " + lootText);
+		else
+		EventNotifier.Invoke("貓貓們什麼都沒有拿回來:3");
 	}
 
 	private Ientity[] CalculateLoots(levels level, int[] catIDs){
@@ -486,6 +490,7 @@ public class playerStateControl : MonoBehaviour {
 				int dice = (int)(Random.Range(0, 100) - (lootCand.rarity - cat.rarity) * CLD.GetPossibleBonus());
 				if(dice <= lootData.pos){
 					bestLoot = lootCand;
+					break;
 				}
 			}
 			if(bestLoot!=null)loots.Add(bestLoot);

@@ -593,7 +593,8 @@ PlayerSettings:
   webGLCompressionFormat: 1
   scriptingDefineSymbols: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Metro: 2
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 0
@@ -609,7 +610,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: cattylab
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: cattylab
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0

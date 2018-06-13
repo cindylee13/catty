@@ -54,6 +54,7 @@ public class UI_ListCtrl : MonoBehaviour {
 			//item.transform.localPosition = new Vector3(0, offset, 0);
 			item.GetComponent<UI_ListItemCtrl>().EntityName = lid.EntityName;
 			item.GetComponent<UI_ListItemCtrl>().Misc = lid.MiscData;
+			item.GetComponent<UI_ListItemCtrl>().count = lid.count;
 			item.GetComponent<UI_ListItemCtrl>().EntitySprite = _spriteFinder.findSpriteByEntityID(lid.EntityID, lid.EntityType);
 			item.GetComponent<UI_ListItemCtrl>().orderInList = Count;
 			item.GetComponent<UI_ListItemCtrl>().MainController = _MainControl;
@@ -94,5 +95,6 @@ public class ListItemData{
 	public string EntityType;
 	public int EntityID;
 	public bool Interable = false;
+	public int count;
 
 }

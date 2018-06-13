@@ -6,7 +6,7 @@ public class CameraControl : MonoBehaviour
 {
 
     public GameObject _camera;
-    public List<GameObject> catRoomToHide, shopToHide, encToHide, catLabToHide, mapToHide;
+    public Animator CatRoomAnim, ShopAnim, EncAnim, LabAnim, MapAnim;
     public GameObject _CatRoom;
     public GameObject _Shop;
     public GameObject _Encyclopedia;
@@ -15,6 +15,7 @@ public class CameraControl : MonoBehaviour
     public double x;
     public float speed;
     private GameObject _nowPosition;
+    private Animator _ButtonAnim;
     private Transform _startMarker;
     private float _journeyLength, _startTime;
     private List<GameObject> cameraLocations = new List<GameObject>();
@@ -33,6 +34,7 @@ public class CameraControl : MonoBehaviour
         _journeyLength = 0f;
         _camera.transform.position = GetPositionForCamera(_CatRoom);
         _nowPosition = _CatRoom;
+        
         moveCameraToHome();
     }
 
@@ -43,11 +45,6 @@ public class CameraControl : MonoBehaviour
         cameraLocations.Add(_Encyclopedia);
         cameraLocations.Add(_CatLab);
         cameraLocations.Add(_Map);
-        everythingToHide.Add(catRoomToHide);
-        everythingToHide.Add(shopToHide);
-        everythingToHide.Add(encToHide);
-        everythingToHide.Add(catLabToHide);
-        everythingToHide.Add(mapToHide);
     }
 
     // Update is called once per frame
@@ -65,30 +62,35 @@ public class CameraControl : MonoBehaviour
     }
     public void moveCameraToCatLab()
     {
+        SetAnimation(LabAnim);
         MoveToTarget(_CatLab);
         //ActivateItem(_CatLab);
         //x = -10.9 - _camera.transform.position.x;
     }
     public void moveCameraToHome()
     {
+        SetAnimation(CatRoomAnim);
         MoveToTarget(_CatRoom);
         //ActivateItem(_CatRoom);
         //x = -0.1 - _camera.transform.position.x;
     }
     public void moveCameraToEN()
     {
+        SetAnimation(EncAnim);
         MoveToTarget(_Encyclopedia);
         //ActivateItem(_Encyclopedia);
         //x = -21.8 - _camera.transform.position.x;
     }
     public void moveCameraToMap()
     {
+        SetAnimation(MapAnim);
         MoveToTarget(_Map);
         //ActivateItem(_Map);
         //x = 10.7 - _camera.transform.position.x;
     }
     public void moveCameraToShop()
     {
+        SetAnimation(ShopAnim);
         MoveToTarget(_Shop);
         //ActivateItem(_Shop);
         //x = 21.6 - _camera.transform.position.x;
@@ -96,6 +98,7 @@ public class CameraControl : MonoBehaviour
 
     private void MoveToTarget(GameObject target)
     {
+     
         _startTime = Time.time;
         _startMarker = transform;
         _journeyLength = Vector3.Distance(_camera.transform.position, GetPositionForCamera(target));
@@ -110,6 +113,13 @@ public class CameraControl : MonoBehaviour
     private bool V3Equal(Vector3 a, Vector3 b)
     {
         return Vector3.SqrMagnitude(a - b) < 0.0001;
+    }
+
+    private void SetAnimation(Animator target){
+        if(_ButtonAnim!=null)
+        _ButtonAnim.SetBool("Active",false);
+        target.SetBool("Active", true);
+        _ButtonAnim = target;
     }
 
     private void ActivateItem(GameObject item)

@@ -87,19 +87,32 @@ public class UI_Control : MonoBehaviour {
 			ListItemData lid = new ListItemData();
 			lid.EntityID = c.ent_id;
 			lid.EntityType = "cat";
-			lid.MiscData = "X" + (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id));
+			lid.count = (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id));
+			lid.MiscData = GetRarityStars(CLD.GetCatData(c.ent_id).rarity)+"X" + (c.avaliable - MatchingEntityInList(_catOccupied, c.ent_id));
 			_CraftlidList.Add(lid);
 		}
 		foreach(item i in overallData.OwnedItems){
 			ListItemData lid = new ListItemData();
 			lid.EntityID = i.ent_id;
 			lid.EntityType = "item";
-			lid.MiscData = "X" + (i.count - MatchingEntityInList(_itemOccupied, i.ent_id));
+			lid.count = (i.count - MatchingEntityInList(_itemOccupied, i.ent_id));
+			lid.MiscData = GetRarityStars(CLD.GetItemData(i.ent_id).rarity)+ "X" + (i.count - MatchingEntityInList(_itemOccupied, i.ent_id));
 			_CraftlidList.Add(lid);
 		}
 		_CraftingList.listItemData = _CraftlidList;
 		CheckRecipe();
 	}
+
+	 private string GetRarityStars(int rarity)
+    {
+        string output = "<color=#e5c110>";
+        for (int i = 0; i < rarity; i++)
+        {
+            output += "★";
+        }
+        output += "</color>";
+        return output;
+    }
 
 	void RefreshOccupyList(){
 		List<ListItemData> occupylidList = new List<ListItemData>();
