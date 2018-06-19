@@ -5,7 +5,7 @@ using UnityEngine;
 public class UI_EncControl : MonoBehaviour
 {
 
-    public UI_GeneralListControl _list;
+    public UI_GeneralListControl _list, listCat, listItem;
     public UI_Control _overallControl;
     private List<ListItemData> _LIDList;
     // Use this for initialization
@@ -20,7 +20,12 @@ public class UI_EncControl : MonoBehaviour
 
     }
 
-    public void refreshList()
+    public void refreshList(){
+        refreshItemList();
+        refreshCatList();
+    }
+
+    public void refreshItemList()
     {
         if (_LIDList == null)
         {
@@ -30,8 +35,37 @@ public class UI_EncControl : MonoBehaviour
         {
             _LIDList.Clear();
         }
-        List<catData> allCats = new List<catData>(_overallControl.CLD.GetAllCats());
         List<itemData> allItems = new List<itemData>(_overallControl.CLD.GetAllItems());
+
+        foreach (itemData iD in allItems)
+        {
+            try
+            {
+                ListItemData lid = new ListItemData();
+                lid.EntityID = iD.ent_id;
+                lid.EntityType = "item";
+                lid.EntityName = _overallControl.CLD.GetItemName(iD.ent_id) + GetRarityStars(iD.rarity);
+                lid.MiscData = "合成物品";
+                _LIDList.Add(lid);
+            }
+            catch
+            {
+
+            }
+        }
+        listItem.listItemData = _LIDList;
+    }
+
+    public void refreshCatList(){
+        if (_LIDList == null)
+        {
+            _LIDList = new List<ListItemData>();
+        }
+        else
+        {
+            _LIDList.Clear();
+        }
+        List<catData> allCats = new List<catData>(_overallControl.CLD.GetAllCats());
         foreach (catData cD in allCats)
         {
             try
@@ -49,23 +83,7 @@ public class UI_EncControl : MonoBehaviour
 
             }
         }
-        foreach (itemData iD in allItems)
-        {
-            try
-            {
-                ListItemData lid = new ListItemData();
-                lid.EntityID = iD.ent_id;
-                lid.EntityType = "item";
-                lid.EntityName = _overallControl.CLD.GetItemName(iD.ent_id) + GetRarityStars(iD.rarity);
-                lid.MiscData = "合成物品";
-                _LIDList.Add(lid);
-            }
-            catch
-            {
-
-            }
-        }
-        _list.listItemData = _LIDList;
+        listCat.listItemData = _LIDList;
     }
 
     private string GetRarityStars(int rarity)
