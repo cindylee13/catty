@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class UI_Control : MonoBehaviour {
 	
 	public cattyLabDictionaty CLD;
+	public spriteFinder spriteFinder;
 	private List<string> _pendingMessage;
-	private bool _isMessengerActive = false;
+	private List<RichMessage> _pendingRichMessage;
+	private bool _isMessengerActive = false, _isRichMessageActive = false;
 	public playerStateControl overallData;
 	public List<Text> _moneyText;
 	public List<Text> _craftingTimeText;
@@ -17,17 +19,19 @@ public class UI_Control : MonoBehaviour {
 	public MainUI_GroupCounterControl _GCC;
 	public List<int> _catOccupied, _itemOccupied;
 	private List<ListItemData> _CraftlidList;
-	public Button _StartCraftingBtn;
-	public Animator messengerAnim;
-	public Text messengerText;
+	public Button _StartCraftingBtn, closeRichMessenger;
+	public Animator messengerAnim,richMessengerAnim, potAnim;
+	public Text messengerText, richMsgTitle, richMsgTitle2, richMsgMisc, richMsgRarity;
+	public Image richMsgImage;
 	private bool _ready = false;
-	public GameObject _groupAvailable, _groupUnavailable, _groupPanel;
+	public GameObject _groupAvailable, _groupUnavailable, _groupPanel, richMessenger;
 	// Use this for initialization
 	IEnumerator Start () {
 		if(!CLD.IsReady){
 			yield return 0;
 		}
 		_pendingMessage = new List<string>();
+		_pendingRichMessage = new List<RichMessage>();
 		_CraftlidList = new List<ListItemData>();
 		_catOccupied = new List<int>();
 		_itemOccupied = new List<int>();
@@ -35,6 +39,8 @@ public class UI_Control : MonoBehaviour {
 		_StartCraftingBtn.onClick.AddListener(SendRecipe);
 		ResetCraftingOccupy();
 		_ready = true;
+		richMessenger.SetActive(false);
+		closeRichMessenger.onClick.AddListener(ClosePendingRichMessage);
 	}
 
 	void OnApplicationQuit(){
@@ -59,6 +65,9 @@ public class UI_Control : MonoBehaviour {
 		if(!_isMessengerActive && _pendingMessage.Count > 0){
 			StartCoroutine(ShowPendingMessage());
 		}
+		if(!_isRichMessageActive && _pendingRichMessage.Count > 0){
+			ShowPendingRichMessage();
+		}
 	}
 
 	void SendRecipe(){
@@ -67,6 +76,18 @@ public class UI_Control : MonoBehaviour {
 		ResetCraftingOccupy();
 		StartCoroutine(craftingCountDownClock());
 
+	}
+
+	public void StartCookingAnimation()
+	{
+		potAnim.SetBool("isCooking",true);
+		potAnim.SetBool("isReady",false);
+	}
+
+	public void StopCookingAnimation()
+	{
+		potAnim.SetBool("isCooking",false);
+		potAnim.SetBool("isReady",false);
 	}
 
 	public void ChangeMoneyText(){
@@ -143,7 +164,7 @@ public class UI_Control : MonoBehaviour {
 	public void CraftingItemClicked(int orderInList){
 		
 		Debug.Log("Yee Haw "+orderInList);
-		if(_catOccupied.Count + _itemOccupied.Count >= 8) return;
+		if(_catOccupied.Count + _itemOccupied.Count >= 4) return;
 		if(_CraftlidList[orderInList].EntityType == "cat"){
 			_catOccupied.Add(_CraftlidList[orderInList].EntityID);
 		}else{
@@ -181,6 +202,7 @@ public class UI_Control : MonoBehaviour {
 	private void CheckRecipe(){
 		if(_catOccupied.Count > 0 || _itemOccupied.Count > 0)
 		_StartCraftingBtn.interactable = CLD.FindRecipeResultData(_catOccupied, _itemOccupied) != null;
+		potAnim.SetBool("isReady",_StartCraftingBtn.interactable);
 	}
 
 	private int MatchingEntityInList(List<int> a, int id){
@@ -277,6 +299,10 @@ public class UI_Control : MonoBehaviour {
 		_pendingMessage.Add(text);
 	}
 
+	public void RichEventMessage(RichMessage rm){
+		_pendingRichMessage.Add(rm);
+	}
+
 	public int maxGroupPplCount{
 		get{
 			return overallData.maxGroupPplCount;
@@ -304,4 +330,52 @@ public class UI_Control : MonoBehaviour {
 		_isMessengerActive = false;
 	}
 
+	void ShowPendingRichMessage(){
+		_isRichMessageActive = true;
+		richMessenger.SetActive(true);
+		richMsgImage.sprite = _pendingRichMessage[0].Image;
+		richMsgMisc.text =  _pendingRichMessage[0].misc;
+		richMsgTitle.text = _pendingRichMessage[0].title;
+		richMsgTitle2.text = _pendingRichMessage[0].title2;
+		richMsgRarity.text = _pendingRichMessage[0].rarity;
+		_pendingRichMessage.RemoveAt(0);
+		richMessengerAnim.Play("richMsger_appear");
+	}
+
+	void ClosePendingRichMessage(){
+		_isRichMessageActive = false;
+		richMessenger.SetActive(false);
+	}
+
+	public void ReceiveNewCat(int id, int type){
+		RichMessage rm = new RichMessage();
+		catData cd = CLD.GetCatData(id);
+		rm.title = cd.name;
+		rm.title2 = "新的貓貓!!";
+		rm.GetRarityStars(cd.level);
+		rm.misc = cd.description;
+		rm.Image = spriteFinder.findSpriteByEntityID(id,"cat");
+		RichEventMessage(rm);
+	}
+
+}
+
+public class RichMessage
+{
+	public string title = "";
+	public string title2 = "";
+	public string misc = "";
+	public Sprite Image;
+	public string rarity = "";
+
+	public void GetRarityStars(int rarityInt)
+    {
+        string output = "<color=#e5c110>";
+        for (int i = 0; i < rarityInt; i++)
+        {
+            output += "★";
+        }
+        output += "</color>";
+        rarity = output;
+    }
 }

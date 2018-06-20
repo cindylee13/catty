@@ -55,6 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224395952324954606}
   - component: {fileID: 114749047179991724}
+  - component: {fileID: 95813509973792522}
   m_Layer: 0
   m_Name: OccupyItem
   m_TagString: Untagged
@@ -81,6 +82,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &95813509973792522
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1504578478227590}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f72c1d954d5143749916adcc17edab8d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!95 &95958344750722490
 Animator:
   serializedVersion: 3
@@ -287,7 +305,7 @@ RectTransform:
   m_GameObject: {fileID: 1151373660890356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7879994, y: 0.78799933, z: 0.78799933}
+  m_LocalScale: {x: 1, y: 1, z: 0.78799933}
   m_Children: []
   m_Father: {fileID: 224396984156174894}
   m_RootOrder: 0

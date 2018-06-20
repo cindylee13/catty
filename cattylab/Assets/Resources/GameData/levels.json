@@ -8,8 +8,6 @@
             "unlockScore":0,
             "loots":[
               {"type":"cat", "id":0, "pos":80},
-              {"type":"cat", "id":0, "pos":70},
-              {"type":"cat", "id":0, "pos":50},
               {"type":"item", "id":1, "pos":30},
               {"type":"item", "id":2, "pos":30},
               {"type":"item", "id":3, "pos":20}
@@ -25,8 +23,6 @@
             "unlockScore":0,
             "loots":[
               {"type":"cat", "id":0, "pos":70},
-              {"type":"cat", "id":0, "pos":60},
-              {"type":"cat", "id":0, "pos":30},
               {"type":"item", "id":3, "pos":30},
               {"type":"item", "id":4, "pos":25},
               {"type":"item", "id":5, "pos":70},
@@ -42,8 +38,6 @@
             "unlockScore":1,
             "loots":[
                 {"type":"cat", "id":0, "pos":70},
-                {"type":"cat", "id":0, "pos":40},
-                {"type":"cat", "id":0, "pos":30},
                 {"type":"item", "id":3, "pos":30},
                 {"type":"item", "id":4, "pos":30},
                 {"type":"item", "id":5, "pos":30},
@@ -63,8 +57,6 @@
             "unlockScore":1,
             "loots":[
                 {"type":"cat", "id":0, "pos":70},
-                {"type":"cat", "id":0, "pos":40},
-                {"type":"cat", "id":0, "pos":30},
                 {"type":"item", "id":3, "pos":30},
                 {"type":"item", "id":4, "pos":30},
                 {"type":"item", "id":5, "pos":30},
@@ -86,7 +78,6 @@
             "unlockScore":3,
             "loots":[
                 {"type":"cat", "id":0, "pos":50},
-                {"type":"cat", "id":0, "pos":30},
                 {"type":"item", "id":1, "pos":30},
                 {"type":"item", "id":2, "pos":30},
                 {"type":"item", "id":3, "pos":30},

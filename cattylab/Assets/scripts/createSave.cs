@@ -78,7 +78,7 @@ public class saveData
         }
         else
         {
-            Debug.Log(tmp);
+            //Debug.Log(tmp);
             gameData = JsonUtility.FromJson<gameData>(tmp);
         }
         return true;

@@ -13,7 +13,7 @@ public class UI_GeneralListItemControl : MonoBehaviour {
 	public Text EntityNameText;
 	public Text MiscText;
 	public string Type;
-	public int orderInList;
+	public int orderInList,EntityID,count = -1;
 	public bool ButtonEnabled = false;
 	
 	

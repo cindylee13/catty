@@ -40,7 +40,7 @@ public class UI_OccupyListControl : MonoBehaviour {
 		DestroyAllItems();
 		int Count = 0;
 		float offset = 0;
-		Debug.Log(_listItemData.Count);
+		//Debug.Log(_listItemData.Count);
 		foreach(ListItemData lid in _listItemData){
 			GameObject item;
 			item = Instantiate(_listItem,_list.transform, false) as GameObject;
